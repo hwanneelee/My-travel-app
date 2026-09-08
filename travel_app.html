@@ -1,0 +1,1273 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1769e0"><link rel="manifest" href="manifest.json"><title>나의 여행 수첩</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="나의 여행 수첩">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png" sizes="192x192">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{--p:#1769e0;--g:#087f5b;--bg:#f4f7fb;--card:#fff;--sub:#687385;--line:#e3e8ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;padding-bottom:76px}
+header{color:#fff;padding:14px 16px;position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--p),#0d47a1);box-shadow:0 2px 8px #0002}.golf header{background:linear-gradient(135deg,#087f5b,#075b43)}
+.title{font-size:20px;font-weight:800}.headback{display:none;background:#ffffff22;color:#fff;border:1px solid #ffffff44;padding:6px 11px;margin-right:8px;font-size:20px;line-height:1}.headback.show{display:block}.sub{font-size:12px;opacity:.85;margin-top:3px}
+main{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 2px 12px #00000009}
+.row{display:flex;gap:7px;align-items:center}.between{justify-content:space-between}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.full{grid-column:1/-1}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 12px;background:var(--p);color:white;font-weight:700;cursor:pointer}button.gray{background:#e9eef6;color:#26344b}button.green{background:var(--g)}button.red{background:#ffe7e7;color:#b42318}
+input,select,textarea{width:100%;padding:10px;border:1px solid #d8e0ea;border-radius:10px;background:#fff}label{display:block;font-size:12px;color:var(--sub);margin:7px 0 4px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30}.nav button{flex:1;background:#fff;color:var(--sub);border-radius:0;font-size:11px;padding:8px 2px}.nav button.active{color:var(--p);border-top:3px solid var(--p)}
+.golf .nav button.active{color:var(--g);border-top-color:var(--g)}
+.badge{font-size:11px;padding:4px 8px;border-radius:99px;background:#e8f0fe;color:var(--p)}.golf .badge{background:#e6f7f1;color:var(--g)}
+.muted{font-size:12px;color:var(--sub)}.big{font-size:25px;font-weight:850}
+.schedule{background:#f9fbff;border-left:4px solid var(--p);padding:11px;border-radius:10px;margin:8px 0}.golf .schedule{border-left-color:var(--g)}.schedule.done{opacity:.55}.done .st{text-decoration:line-through}.st{font-weight:800;font-size:16px;margin:4px 0}
+.tabs{display:flex;gap:6px;overflow:auto;margin-bottom:10px}.tabs button{white-space:nowrap}.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#f8fafc;padding:11px;border-radius:12px}.stat b{display:block;font-size:20px;margin-top:3px}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;z-index:50;backdrop-filter:blur(1px)}.modal.show{display:flex}.sheet{background:#fff;width:100%;max-width:900px;margin:auto;border-radius:20px 20px 0 0;padding:16px;max-height:94vh;overflow:auto;transform:translateY(24px);opacity:0;transition:transform .22s ease,opacity .22s ease}.modal.show .sheet{transform:translateY(0);opacity:1}
+button{box-shadow:0 2px 6px #0000001a}button.gray{box-shadow:none}
+.sheethead{display:flex;align-items:center;justify-content:space-between;position:sticky;top:-16px;background:#fff;padding:4px 0 10px;z-index:2}.sheethead .back{background:#e9eef6;color:#26344b;padding:7px 10px}.sheethead h2{margin:0;font-size:19px}.tee{background:#f5faf8;border-radius:12px;padding:10px;margin:7px 0}.hole{display:grid;grid-template-columns:55px 1fr 70px;gap:6px;align-items:center;margin:5px 0}.score{font-size:20px;font-weight:800;text-align:center}.check{display:flex;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}.check input{width:auto}
+.subtabs{display:flex;gap:6px;overflow:auto;margin-bottom:10px;padding:3px 0;scrollbar-width:none}.subtabs::-webkit-scrollbar{display:none}.subtabs button{white-space:nowrap;padding:9px 13px;font-size:12px;background:#eef2f8;color:#526176;border:1px solid transparent;transition:.15s}.subtabs button.active{background:var(--p)!important;color:#fff!important;box-shadow:0 3px 9px #1769e033;border-color:var(--p)!important}.subtabs button:not(.active){background:#eef2f8!important;color:#526176!important}.golf .subtabs button.active{background:var(--g)!important;border-color:var(--g)!important;box-shadow:0 3px 9px #087f5b33}
+.chiplist{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.chip{background:#eef2f8;color:#26344b;padding:6px 11px;border-radius:99px;font-size:12px;cursor:pointer;user-select:none}.chip.on{background:var(--p);color:#fff}.golf .chip.on{background:var(--g)}
+.small{font-size:11px;padding:6px 9px}.donebtn{min-width:58px;line-height:1.08;padding:7px 8px}.daytabs{display:flex;gap:6px;overflow:auto;padding:3px 0 8px}.daytabs button{min-width:74px;background:#eef2f8;color:#526176}.daytabs button.active{background:var(--p);color:#fff}.golf .daytabs button.active{background:var(--g)}.costshot{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.donebtn span{display:block}.sharebox{background:linear-gradient(135deg,#f7faff,#eef6ff);border:1px solid #dbe8fb}.golf .sharebox{background:linear-gradient(135deg,#f4fbf8,#e8f7f1);border-color:#d5eee4}.mapbtn{background:#eef5ff;color:#1769e0;border:1px solid #cfe0ff}.golf .mapbtn{background:#e9f8f2;color:#087f5b;border-color:#cdebdc}.maplinks{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.warn{background:#fff8e6;border:1px solid #f1d48a;color:#7a5a00;padding:10px;border-radius:10px;font-size:12px}.lockscreen{position:fixed;inset:0;background:linear-gradient(135deg,#1769e0,#0d47a1);z-index:999;display:none;align-items:center;justify-content:center;padding:20px}.lockscreen.show{display:flex}.lockbox{width:min(420px,100%);background:#fff;border-radius:24px;padding:24px;box-shadow:0 20px 60px #0004}.appbadge{width:70px;height:70px;border-radius:18px;background:#eef5ff;display:grid;place-items:center;font-size:36px;margin-bottom:14px}.settingsgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.camera-btn{background:var(--p);color:#fff;box-shadow:0 3px 8px #1769e033}.golf .camera-btn{background:var(--g);box-shadow:0 3px 8px #087f5b33}.receiptthumb{width:58px;height:58px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}
+.pos{color:#087f5b;font-weight:800}.neg{color:#b42318;font-weight:800}.settletable{width:100%;border-collapse:collapse;font-size:12px}.settletable th,.settletable td{padding:9px 7px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}.settletable th:first-child,.settletable td:first-child{text-align:left}.settlerow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}.settlerow:last-child{border-bottom:0}
+.arrow{color:var(--p);font-weight:800}.golf .arrow{color:var(--g)}
+.dz{border:2px dashed #c7d2e0;border-radius:12px;padding:14px;text-align:center;color:var(--sub);font-size:12px;margin:8px 0}
+@media(min-width:700px){.sheet{border-radius:20px}.modal{padding:20px}}
+</style></head>
+<body>
+<header><div class="row"><button id="backBtn" class="headback" onclick="goBack()" aria-label="뒤로">←</button><div><div class="title" id="title">나의 여행 수첩</div><div class="sub" id="sub">여행 모드를 선택하세요</div></div></div></header>
+<main id="app"></main>
+<div class="nav" id="nav"></div><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div><div id="lockscreen" class="lockscreen"><div class="lockbox"><div class="appbadge">✈️</div><h2 style="margin:0 0 6px">나의 여행 수첩 (가족 전용)</h2><div class="muted" id="lockSub">가족용 앱 비밀번호를 입력하세요.</div><label>4자리 숫자 비밀번호</label><input id="appLockPw" inputmode="numeric" maxlength="4" type="password" placeholder="••••"><button style="width:100%;margin-top:12px" onclick="unlockApp()">🔓 앱 열기</button><button class="gray" style="width:100%;margin-top:8px" onclick="familySetup(true)">비밀번호 설정/변경</button><div class="muted" style="margin-top:12px">각 가족 휴대폰은 처음 한 번 같은 가족 비밀번호를 설정하면 됩니다.</div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs").then(m=>window.pdfjsLib=m).catch(()=>{});</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+const KEY='travel_pro_v22';let db,tid=null,view='home',mode='tour',settleTab='individual',historySelected=null,settleView='individual';
+window.tmpSplit=[];window.tmpSplitTeam='';
+const $=x=>document.getElementById(x),save=()=>localStorage.setItem(KEY,JSON.stringify(db)),trip=()=>db.trips.find(x=>x.id===tid),won=n=>Number(Math.round(n||0)).toLocaleString()+'원';
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function localDateStr(d){d=d||new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+const CATS=['숙박','식사','교통','입장료/관광','쇼핑','골프','기타'];
+const BOOKING_LABELS={hotel:'숙박',flight:'항공권',golf:'골프 티타임',activity:'투어/액티비티/입장권',restaurant:'레스토랑',car:'렌터카',etc:'기타'};
+const BOOKING_SITES={
+  hotel:[['아고다','아고다 호텔 예약'],['부킹닷컴','부킹닷컴 호텔 예약'],['야놀자','야놀자 호텔 예약'],['여기어때','여기어때 호텔 예약'],['네이버 호텔 가격비교','네이버 호텔 가격비교']],
+  flight:[['스카이스캐너','스카이스캐너 항공권 가격비교'],['네이버 항공권','네이버 항공권 가격비교'],['인터파크투어','인터파크투어 항공권'],['카약 Kayak','카약 항공권 가격비교']],
+  golf:[['골프존카운티','골프존카운티 티타임 예약'],['엑스골프','엑스골프 티타임 예약'],['카카오골프예약','카카오골프예약 티타임'],['골프박스','골프박스 티타임 예약']],
+  activity:[['클룩 Klook','클룩 투어 액티비티 예약'],['케이케이데이 KKday','케이케이데이 투어 예약'],['마이리얼트립','마이리얼트립 투어 예약'],['트립닷컴','트립닷컴 투어 예약']],
+  restaurant:[['캐치테이블','캐치테이블 레스토랑 예약'],['네이버 예약','네이버 예약'],['망고플레이트','망고플레이트 맛집 정보']],
+  car:[['카카오모빌리티 렌터카','카카오모빌리티 렌터카 예약'],['트립닷컴 렌터카','트립닷컴 렌터카 예약'],['롯데렌터카','롯데렌터카 예약']],
+  etc:[['네이버 검색','네이버 예약 검색'],['구글 검색','구글 예약 검색']]
+};
+const TIPS={
+  hotel:'여러 예약 플랫폼(아고다·부킹닷컴·야놀자 등)의 가격을 비교하고, 취소 가능 여부와 조식 포함 여부를 함께 확인하세요. 보통 출발 2~3개월 전 예약이 유리한 경우가 많습니다.',
+  flight:'스카이스캐너·네이버 항공권 등에서 여러 항공사 가격을 한 번에 비교해보세요. 특가 알림 설정이 도움이 됩니다.',
+  golf:'평일 오전/늦은 오후(트와일라잇) 티타임이 상대적으로 저렴한 경우가 많습니다. 여러 예약 앱의 특가 티타임을 비교해보세요.',
+  activity:'같은 투어라도 플랫폼마다 가격이 다를 수 있어 2~3곳을 비교하고, 조기예약 할인이 있는지 확인하세요.',
+  restaurant:'인기 맛집은 예약 오픈 시간에 맞춰 선점하는 것이 중요합니다. 예약 확정 알림을 꼭 확인하세요.',
+  car:'플랫폼별 보험 포함 여부에 따라 총 비용 차이가 크니, 기본요금뿐 아니라 보험료까지 포함한 총액을 비교하세요.',
+  etc:'여러 채널의 가격을 함께 비교해보고 예약하세요.'
+};
+
+/* ---------- 모드별 데이터 분리 ---------- */
+function activeEvents(x){return mode==='golf'?(x.golfData?.events||[]):(x.tour?.events||[])}
+function activeExpenses(x){return mode==='golf'?(x.golfData?.expenses||[]):(x.tour?.expenses||[])}
+function activePayments(x){return mode==='golf'?(x.golfData?.payments||[]):(x.tour?.payments||[])}
+function setActiveEvents(x,a){x[mode==='golf'?'golfData':'tour'].events=a}
+function setActiveExpenses(x,a){x[mode==='golf'?'golfData':'tour'].expenses=a}
+function setActivePayments(x,a){x[mode==='golf'?'golfData':'tour'].payments=a}
+function migrateModeData(t){
+ t.tour=t.tour||{events:[],expenses:[],payments:[]}; t.golfData=t.golfData||{events:[],expenses:[],payments:[]};
+ if(!t._modeSeparated){if(t.mode==='golf'){t.golfData.events=(t.events||[]).slice();t.golfData.expenses=(t.expenses||[]).slice();t.golfData.payments=(t.payments||[]).slice()}else{t.tour.events=(t.events||[]).slice();t.tour.expenses=(t.expenses||[]).slice();t.tour.payments=(t.payments||[]).slice()}t._modeSeparated=true}
+ delete t.events;delete t.expenses;delete t.payments;
+}
+
+/* ---------- 데이터 로드 / 마이그레이션 ---------- */
+function ensureFields(){
+  db.history=db.history||[];
+  db.trips=db.trips||[];
+  db.favoritePeople=db.favoritePeople||[];
+  db.trips.forEach(t=>{
+    migrateModeData(t);
+    t.teams=t.teams||[];t.checks=t.checks||[];t.notes=t.notes||'';
+    t.golf=t.golf||{courses:[],scores:[]};t.golf.courses=t.golf.courses||[];t.golf.scores=t.golf.scores||[];
+    t.people=(t.people||[]).map(p=>({id:p.id||uid(),name:p.name||'이름',team:p.team||''}));
+    [t.tour,t.golfData].forEach(scope=>{scope.events=(scope.events||[]).map(e=>({id:e.id||uid(),date:e.date||'',time:e.time||'',title:e.title||'일정',place:e.place||'',transport:e.transport||'',route:e.route||'',travelTime:e.travelTime||'',detail:e.detail||'',photos:Array.isArray(e.photos)?e.photos:[],cost:+e.cost||0,payer:e.payer||'',splitScope:e.splitScope||'all',splitWith:e.splitWith||[],splitTeam:e.splitTeam||'',done:!!e.done,category:e.category||'기타',slot:e.slot||'other',bookingStatus:e.bookingStatus||'none',bookingCategory:e.bookingCategory||'etc',recommendType:e.recommendType||'',recommendPlace:e.recommendPlace||'',recommendation:e.recommendation||''}));scope.expenses=(scope.expenses||[]).map(ex=>({id:ex.id||uid(),title:ex.title||'비용',date:ex.date||'',amount:+ex.amount||0,payer:ex.payer||'',splitScope:ex.splitScope||'all',splitWith:ex.splitWith||[],splitTeam:ex.splitTeam||'',category:ex.category||'기타',receiptImage:ex.receiptImage||'',receiptText:ex.receiptText||'',receiptMerchant:ex.receiptMerchant||'',receiptDate:ex.receiptDate||'',receiptAmount:+ex.receiptAmount||0}));scope.payments=(scope.payments||[]).map(r=>({id:r.id||uid(),title:r.title||'회비/수납',date:r.date||'',amount:+r.amount||0,payer:r.payer||'',team:r.team||''}))});
+    t.golf.courses=(t.golf.courses||[]).map(c=>({id:c.id||uid(),name:c.name||'골프장',date:c.date||'',tee:c.tee||'',green:+c.green||0,caddy:+c.caddy||0,cart:+c.cart||0,players:+c.players||4,payer:c.payer||'',splitScope:c.splitScope||'all',splitWith:c.splitWith||[],splitTeam:c.splitTeam||'',bookingStatus:c.bookingStatus||'needed',bookingCategory:'golf'}));
+    t.checks=(t.checks||[]).map(c=>typeof c==='string'?{id:uid(),text:c,checked:false}:c);
+  });
+  syncFavoritePeopleFromHistory();
+}
+function addFavoritePerson(name){
+  name=(name||'').trim();if(!name)return;
+  db.favoritePeople=db.favoritePeople||[];
+  if(!db.favoritePeople.some(f=>f.name===name))db.favoritePeople.push({id:uid(),name});
+}
+function syncFavoritePeopleFromHistory(){
+  db.favoritePeople=db.favoritePeople||[];
+  (db.history||[]).forEach(h=>{
+    let ppl=(h.snapshot&&h.snapshot.people)||[];
+    ppl.forEach(p=>{if(p&&p.name)addFavoritePerson(p.name)});
+  });
+}
+function migrate(){
+  let raw=localStorage.getItem(KEY);
+  if(raw){try{db=JSON.parse(raw);ensureFields();return}catch(e){}}
+  let v21=localStorage.getItem('travel_pro_v21');
+  if(v21){try{db=JSON.parse(v21);ensureFields();save();return}catch(e){}}
+  let v20=localStorage.getItem('travel_pro_v20');
+  if(v20){try{db=JSON.parse(v20);ensureFields();save();return}catch(e){}}
+  let v19=localStorage.getItem('travel_pro_v19');
+  if(v19){try{db=JSON.parse(v19);ensureFields();save();return}catch(e){}}
+  let v17=localStorage.getItem('travel_pro_v17');
+  if(v17){try{db=JSON.parse(v17);ensureFields();save();return}catch(e){}}
+  let v14=localStorage.getItem('travel_pro_v14');
+  if(v14){try{db=JSON.parse(v14);ensureFields();db.trips.forEach(t=>{if(!t._legacyCurrentMovedToGolf){t.tour=t.tour||{events:[],expenses:[],payments:[]};t.golfData=t.golfData||{events:[],expenses:[],payments:[]};if(!(t.golfData.events||[]).length&&(t.tour.events||[]).length){t.golfData.events=t.tour.events.slice();t.golfData.expenses=(t.tour.expenses||[]).slice();t.golfData.payments=(t.tour.payments||[]).slice();t.tour={events:[],expenses:[],payments:[]};}t._legacyCurrentMovedToGolf=true;t.mode='golf';}});save();return}catch(e){}}
+  let v11=localStorage.getItem('travel_pro_v11');if(v11){try{db=JSON.parse(v11);ensureFields();save();return}catch(e){}}
+  let v10=localStorage.getItem('travel_pro_v10');
+  if(v10){try{db=JSON.parse(v10);ensureFields();save();return}catch(e){}}
+  let v9=localStorage.getItem('travel_pro_v9');
+  if(v9){try{db=JSON.parse(v9);ensureFields();save();return}catch(e){}}
+  let v8=localStorage.getItem('travel_pro_v8');
+  if(v8){try{db=JSON.parse(v8);ensureFields();save();return}catch(e){}}
+  let v7=localStorage.getItem('travel_pro_v7');
+  if(v7){try{db=JSON.parse(v7);ensureFields();save();return}catch(e){}}
+  let v6=localStorage.getItem('travel_pro_v6');
+  if(v6){try{db=JSON.parse(v6);ensureFields();save();return}catch(e){}}
+  let v5=localStorage.getItem('travel_pro_v5');
+  if(v5){try{db=JSON.parse(v5);ensureFields();return}catch(e){}}
+  let old=localStorage.getItem('travel_pro_v4');
+  if(old){
+    try{
+      let od=JSON.parse(old);
+      od.trips.forEach(t=>{
+        t.teams=t.teams||[];
+        let familyMap={};
+        t.people=(t.people||[]).map(p=>{
+          let team='';
+          if(p.family){
+            if(!familyMap[p.family]){let tid2=uid();familyMap[p.family]=tid2;t.teams.push({id:tid2,name:p.family});}
+            team=familyMap[p.family];
+          }
+          return {id:p.id||uid(),name:p.name||'이름',team};
+        });
+        t.expenses=t.expenses||[];
+        t.events=(t.events||[]).map(e=>({id:e.id||uid(),date:e.date||'',time:e.time||'',title:e.title||'일정',place:e.place||'',transport:e.transport||'',route:e.route||'',cost:+e.cost||0,payer:e.payer||'',splitScope:e.splitScope||'all',splitWith:e.splitWith||[],splitTeam:e.splitTeam||'',done:!!e.done}));
+        t.golf=t.golf||{courses:[],scores:[]};
+        t.golf.courses=(t.golf.courses||[]).map((c,i)=>({id:c.id||uid(),name:c.name||'골프장',date:c.date||'',tee:c.tee||'',green:+c.green||0,caddy:+c.caddy||0,cart:+c.cart||0,players:+c.players||4,payer:c.payer||'',splitScope:c.splitScope||'all',splitWith:c.splitWith||[],splitTeam:c.splitTeam||'',_oldIndex:i}));
+        t.golf.scores=(t.golf.scores||[]).map(s=>{let c=t.golf.courses.find(cc=>cc._oldIndex===s.course);return {course:c?c.id:(t.golf.courses[0]&&t.golf.courses[0].id),holes:s.holes||Array(18).fill(0)}});
+        t.golf.courses.forEach(c=>delete c._oldIndex);
+        t.checks=(t.checks||[]).map(c=>typeof c==='string'?{id:uid(),text:c,checked:false}:c);
+      });
+      db=od;ensureFields();return;
+    }catch(e){}
+  }
+  db={trips:[]};
+}
+function seed(){
+  if(db.trips.length)return;
+  db.trips=[{id:Date.now(),mode:'tour',title:'결혼기념일 특별 여행',start:'',end:'',
+    people:[{id:uid(),name:'나',team:''},{id:uid(),name:'배우자',team:''}],
+    teams:[],tour:{events:[],expenses:[],payments:[]},golfData:{events:[],expenses:[],payments:[]},checks:[],golf:{courses:[],scores:[]}}];
+  save();ensureFields();
+}
+
+/* ---------- 공통 helper ---------- */
+function nameById(x,id){let p=x.people.find(z=>z.id===id);return p?p.name:'미지정'}
+function teamName(x,tid2){let t=x.teams.find(z=>z.id===tid2);return t?t.name:'미배정'}
+function splitLabel(x,item){if(item.splitScope==='team')return teamName(x,item.splitTeam)+' 팀 전체';if(item.splitScope==='custom')return (item.splitWith||[]).map(id=>nameById(x,id)).join(', ')||'(대상 미지정)';return '전체 인원 균등'}
+function targetsFor(x,item){
+  const all=x.people.map(p=>p.id);
+  if(item.splitScope==='team'){
+    const ids=x.people.filter(p=>p.team===item.splitTeam).map(p=>p.id);
+    return ids.length?ids:all;
+  }
+  if(item.splitScope==='custom'){
+    const ids=(item.splitWith||[]).filter(id=>x.people.some(p=>p.id===id));
+    return ids.length?ids:all;
+  }
+  return all;
+}
+function collectCosts(x){
+  let items=[];
+  activeEvents(x).filter(e=>e.cost>0).forEach(e=>items.push({label:e.title,date:e.date,cost:e.cost,payer:e.payer,category:e.category||'기타',targets:targetsFor(x,e)}));
+  (activeExpenses(x)||[]).forEach(e=>items.push({label:e.title,date:e.date,cost:e.amount,payer:e.payer,category:e.category||'기타',targets:targetsFor(x,e),receiptImage:e.receiptImage||'',receiptText:e.receiptText||''}));
+  if(mode==='golf'&&x.golf&&x.golf.courses)x.golf.courses.forEach(c=>{let cost=(+c.green||0)+(+c.caddy||0)+(+c.cart||0);if(cost>0)items.push({label:c.name+' (그린/캐디/카트비)',date:c.date,cost,payer:c.payer,category:'골프',targets:targetsFor(x,c)})});
+  return items;
+}
+function computeBalances(x){
+  let items=collectCosts(x),paid={},owed={};
+  x.people.forEach(p=>{paid[p.id]=0;owed[p.id]=0});
+  items.forEach(it=>{
+    if(it.payer&&paid[it.payer]!==undefined)paid[it.payer]+=it.cost;
+    let n=it.targets.length||1;
+    it.targets.forEach(t=>{if(owed[t]!==undefined)owed[t]+=it.cost/n});
+  });
+  (activePayments(x)||[]).forEach(r=>{if(r.payer&&paid[r.payer]!==undefined)paid[r.payer]+=r.amount});
+  let net={};x.people.forEach(p=>net[p.id]=paid[p.id]-owed[p.id]);
+  return {items,paid,owed,net};
+}
+function settlementWarnings(x){
+  const warnings=[];
+  const all=x.people.map(p=>p.id);
+  if(!all.length)warnings.push('참석자가 없습니다. 먼저 인원을 추가하세요.');
+  collectCosts(x).forEach(it=>{
+    if(it.cost>0&&!it.payer)warnings.push(`‘${it.label}’의 결제자가 지정되지 않았습니다.`);
+    if(it.cost>0&&!it.targets.length)warnings.push(`‘${it.label}’의 분담 대상이 없습니다.`);
+  });
+  const total=collectCosts(x).reduce((s,i)=>s+i.cost,0), net=computeBalances(x).net;
+  const sum=Object.values(net).reduce((s,v)=>s+v,0);
+  if(Math.abs(sum)>1)warnings.push(`현재 입력 기준 미정산 잔액 ${won(sum)}이 있습니다. 모든 지출의 결제자와 분담 대상을 확인하세요.`);
+  return [...new Set(warnings)];
+}
+
+function simplifyDebts(net){
+  let creditors=Object.entries(net).filter(([,v])=>v>0.5).map(([k,v])=>({id:k,amt:v})).sort((a,b)=>b.amt-a.amt);
+  let debtors=Object.entries(net).filter(([,v])=>v<-0.5).map(([k,v])=>({id:k,amt:-v})).sort((a,b)=>b.amt-a.amt);
+  let res=[],i=0,j=0;
+  while(i<debtors.length&&j<creditors.length){
+    let d=debtors[i],c=creditors[j],amt=Math.min(d.amt,c.amt);
+    if(amt>0.5)res.push({from:d.id,to:c.id,amt:Math.round(amt)});
+    d.amt-=amt;c.amt-=amt;
+    if(d.amt<=0.5)i++;
+    if(c.amt<=0.5)j++;
+  }
+  return res;
+}
+function bookingBadge(it){
+  if(!it.bookingStatus||it.bookingStatus==='none')return '';
+  if(it.bookingStatus==='needed')return '<span class="badge" style="background:#ffe7e7;color:#b42318">🔴 예약필요</span>';
+  return '<span class="badge" style="background:#e6f7f1;color:#087f5b">🟢 예약완료</span>';
+}
+
+/* ---------- 모드/네비/렌더 ---------- */
+let viewHistory=[];
+function selectMode(m){mode=m;let x=trip();if(x){x.mode=m;save()}view='home';viewHistory=[];render()}
+function nav(){let items=mode==='golf'?[['home','⛳','골프홈'],['plan','📅','일정'],['course','🏌️','골프장'],['score','📝','스코어'],['money','💳','비용'],['settle','👥','정산'],['history','🕘','히스토리']]:[['home','🏠','여행'],['plan','📅','일정'],['route','🗺️','동선'],['money','💳','비용'],['settle','👥','정산'],['check','☑️','준비'],['history','🕘','히스토리']];$('nav').innerHTML=items.map(a=>`<button class="${view===a[0]?'active':''}" onclick="go('${a[0]}')">${a[1]}<br>${a[2]}</button>`).join('')}
+function go(v){if(v!==view)viewHistory.push(view);view=v;render()}
+function goBack(){if(viewHistory.length){view=viewHistory.pop();render()}else if(view!=='home'){view='home';render()}else if($('modal').classList.contains('show'))closeM();else history.back()}
+function render(){let x=trip();document.body.className=mode==='golf'?'golf':'';$('title').textContent=x?.title||'나의 여행 수첩';$('sub').textContent=x?`${mode==='golf'?'⛳ 골프 여행':'✈️ 일반 관광'} · ${x.start||''} ~ ${x.end||''}`:'모드를 선택하세요';$('backBtn').classList.toggle('show',view!=='home');nav();({home,plan,route,money,settle,check,course,score,history}[view]||home)()}
+function openM(){ 
+  $('sheet').insertAdjacentHTML('afterbegin','<div class="sheethead"><button class="back" onclick="closeM()">← 뒤로</button><button class="gray" onclick="closeM()">닫기 ✕</button></div>');
+  $('modal').classList.add('show'); history.pushState({travelModal:true},''); 
+}
+function closeM(){ 
+  if($('modal').classList.contains('show')){ $('modal').classList.remove('show'); if(history.state&&history.state.travelModal)history.back(); }
+}
+window.addEventListener('popstate',()=>{if($('modal').classList.contains('show')){$('modal').classList.remove('show')}else if(view!=='home'){goBack()}});
+
+/* ---------- 가족용 앱 관리 / 백업 ---------- */
+async function sha256Hex(text){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function familySetup(forceLock=false){
+  const current=db.settings?.appPasswordHash||'';
+  $('sheet').innerHTML=`<h2>👨‍👩‍👧‍👦 가족용 앱 관리</h2><div class="muted">가족이 함께 쓰는 휴대폰마다 같은 4자리 비밀번호를 설정하면 앱을 열 때 잠금 화면이 표시됩니다.</div><label>가족용 4자리 비밀번호 ${current?'(변경)':''}</label><input id="famPw" inputmode="numeric" maxlength="4" type="password" placeholder="0000"><label>다시 입력</label><input id="famPw2" inputmode="numeric" maxlength="4" type="password" placeholder="0000"><div class="settingsgrid" style="margin-top:10px"><button onclick="saveFamilyPassword()">🔐 저장</button><button class="gray" onclick="exportBackup()">⬇️ 백업</button><button class="gray" onclick="document.getElementById('restoreFile').click()">⬆️ 복원</button><button class="gray" onclick="lockApp()">🔒 지금 잠금</button></div><input id="restoreFile" type="file" accept="application/json,.json" style="display:none" onchange="restoreBackup(event)"><div class="warn" style="margin-top:12px">백업 파일은 가족 여행 데이터 전체를 포함할 수 있으므로 카카오톡 공개방 등에는 올리지 마세요. 가족 기기 간 이동용으로 사용하세요.</div><div class="card" style="margin-top:10px"><b>☁️ 가족 실시간 동기화</b><div class="muted" style="margin-top:5px">현재 버전은 서버 없이 동작하는 오프라인 우선 앱입니다. 따라서 여러 휴대폰의 데이터를 자동으로 실시간 합치는 기능은 별도 클라우드 서버가 필요합니다. 대신 백업/복원 파일로 안전하게 기기 간 이동할 수 있습니다.</div></div>`;
+  openM();
+}
+async function saveFamilyPassword(){let a=$('famPw').value,b=$('famPw2').value;if(!/^\d{4}$/.test(a)||a!==b){alert('동일한 4자리 숫자를 입력하세요.');return}db.settings=db.settings||{};db.settings.appPasswordHash=await sha256Hex(a);db.settings.familyMode=true;save();closeM();alert('가족용 앱 잠금이 설정되었습니다. 다음 실행부터 비밀번호가 필요합니다.');}
+async function unlockApp(){let pw=$('appLockPw').value||'';if(!/^\d{4}$/.test(pw)){alert('4자리 숫자를 입력하세요.');return}let h=await sha256Hex(pw);if(h!==(db.settings?.appPasswordHash||'')){alert('비밀번호가 올바르지 않습니다.');return}$('lockscreen').classList.remove('show');$('appLockPw').value='';sessionStorage.setItem('travelpro_unlocked','1')}
+function lockApp(){sessionStorage.removeItem('travelpro_unlocked');$('lockscreen').classList.add('show');$('appLockPw').focus()}
+function maybeLock(){if(db.settings?.appPasswordHash&&sessionStorage.getItem('travelpro_unlocked')!=='1')$('lockscreen').classList.add('show')}
+function exportBackup(){let payload={app:'나의 여행 수첩',version:18,exportedAt:new Date().toISOString(),db};let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='나의_여행_수첩_가족백업_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+async function restoreBackup(ev){let f=ev.target.files[0];if(!f)return;try{let p=JSON.parse(await f.text()),incoming=p.db||p;if(!incoming.trips)throw Error('나의 여행 수첩 백업 파일이 아닙니다.');if(!confirm('현재 여행 데이터가 백업 파일로 교체됩니다. 계속할까요?'))return;db=incoming;ensureFields();save();tid=db.trips[0]?.id||null;mode=db.trips[0]?.mode||'tour';closeM();render();alert('가족 백업을 복원했습니다.')}catch(e){alert('복원 실패: '+(e.message||e))}finally{ev.target.value=''}}
+
+/* ---------- 홈 ---------- */
+function home(){
+  let x=trip(),today=localDateStr();
+  let todayCard='';
+  if(x.start&&x.end&&today>=x.start&&today<=x.end){
+    let todays=activeEvents(x).filter(e=>e.date===today).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+    let next=todays.find(e=>!e.done);
+    todayCard=`<div class="card" style="margin-top:10px"><div class="row between"><div><b>📅 오늘(${esc(today.slice(5).replace('-','/'))}) 일정</b><div class="muted">${todays.length?`${todays.length}건${next?' · 다음: '+esc(next.time||'')+' '+esc(next.title):' · 오늘 일정 완료'}`:'등록된 일정이 없습니다.'}</div></div><button class="gray" onclick="window.planDate='${today}';go('plan')">오늘 일정 보기</button></div></div>`;
+  }
+  $('app').innerHTML=`<div class="card"><div class="row between"><div><span class="badge">${mode==='golf'?'GOLF MODE':'TOUR MODE'}</span><h2 style="margin:7px 0">${mode==='golf'?'골프여행 전용 관리':'일반 관광여행 관리'}</h2><div class="muted">${mode==='golf'?'라운드·티오프·골프장·스코어·카트/캐디비·팀별 정산에 최적화':'일정·관광·식사·교통·동선·추천·비용·팀별 정산에 최적화'}</div></div><button onclick="tripForm()">✏️</button></div></div><div class="card"><div class="row between"><div><b>여행을 완료하셨나요?</b><div class="muted">완료하면 일정·장소·참석자·비용·주요 내용을 히스토리에 저장해 나중에 다시 볼 수 있습니다.</div></div><button class="green donebtn" onclick="completeTripForm()"><span>여행<br>완료</span></button></div></div>
+  ${todayCard}
+  <div class="card sharebox"><div class="row between"><div><b>🔐 지정 사용자에게 여행 앱/기록 보내기</b><div class="muted">카카오톡 등 휴대폰 공유 메뉴로 전달할 수 있으며, 수신자는 4자리 숫자 비밀번호를 입력해야 열 수 있습니다.</div></div><button onclick="shareTripPackage()">📲 공유</button></div></div>
+  <div class="grid"><button onclick="selectMode('tour')" class="${mode==='tour'?'':'gray'}">✈️ 일반 관광</button><button onclick="selectMode('golf')" class="${mode==='golf'?'green':'gray'}">⛳ 골프 여행</button></div>
+  <div class="card" style="margin-top:10px"><h3>현재 여행</h3><div class="big">${esc(trip().title)}</div><div class="muted">${trip().start||''} ~ ${trip().end||''} · 인원 ${trip().people.length}명 · 팀 ${trip().teams.length}개</div><button class="gray" style="margin-top:10px" onclick="tripForm()">🆕 새 여행 등록 / 참석자·팀 설정</button></div>
+  <div class="card"><div class="row between"><div><b>📲 "나의 여행 수첩" 앱으로 설치</b><div class="muted">홈 화면에 추가하면 브라우저 주소창 없이 앱처럼 전체화면으로 실행됩니다.</div></div><button class="gray" onclick="installGuide()">설치 방법</button></div></div>
+  <div class="card"><div class="row between"><div><b>⭐ 자주 다니는 사람 관리</b><div class="muted">등록해두면 새 여행 참석자 추가 시 드롭다운으로 바로 선택할 수 있습니다. (현재 ${(db.favoritePeople||[]).length}명)</div></div><button class="gray" onclick="favoritePeopleManager()">관리</button></div></div>
+  <div class="card"><div class="row between"><div><b>👨‍👩‍👧‍👦 가족용 관리</b><div class="muted">앱 잠금, 가족 백업/복원, 기기 간 여행자료 이동을 관리합니다.</div></div><button class="gray" onclick="familySetup()">관리</button></div></div>`;
+}
+function tripForm(){
+  let x=trip(),isNew=/^새 /.test(x.title||'');
+  $('sheet').innerHTML=`<h2>${isNew?'🆕 새 여행 등록':'✏️ 여행 정보 수정'}</h2><label>여행 제목</label><input id="tn" value="${esc(x.title)}"><div class="grid"><div><label>시작일</label><input id="ts" type="date" value="${x.start}"></div><div><label>종료일</label><input id="te" type="date" value="${x.end}"></div></div><label>여행 모드</label><select id="tm"><option value="tour">일반 관광</option><option value="golf">골프 여행</option></select>
+   <div class="card" style="margin-top:14px;padding:12px">
+     <h3 style="margin:0 0 6px">👥 참석 인원</h3>
+     <div class="muted" style="margin-bottom:8px">참석자를 한 명씩 추가한 뒤, 아래에서 여러 명을 선택해 팀으로 묶을 수 있습니다. 정산 탭에서 언제든 다시 수정할 수 있습니다.</div>
+     <div id="tripPeopleList" class="chiplist"></div>
+     <label style="margin-top:8px">⭐ 자주 다니는 사람에서 바로 추가</label>
+     <select id="tpFavSelect" onchange="addTripPersonFromFav()"></select>
+     <div class="row" style="gap:6px;margin-top:8px"><input id="tpNewName" placeholder="새 참석자 이름 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();addTripPerson()}"><button class="gray" onclick="addTripPerson()">＋ 추가</button></div>
+     <div class="muted" style="margin-top:6px">새로 입력한 이름은 자동으로 ⭐ 자주 다니는 사람 명단에도 저장되어 다음 여행부터 드롭다운으로 바로 선택할 수 있습니다.</div>
+   </div>
+   <div class="card" style="margin-top:10px;padding:12px">
+     <h3 style="margin:0 0 6px">🏷️ 팀 구성</h3>
+     <div id="tripTeamsList"></div>
+     <div id="tripNewTeamRow" class="row" style="display:none;margin-top:8px;gap:6px"><input id="tripNewTeamName" placeholder="팀 이름 (예: A팀, 부부1)" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddTripTeam()}"><button class="gray" onclick="confirmAddTripTeam()">추가</button></div>
+     <button class="gray" style="margin-top:8px" onclick="showTripNewTeamRow()">＋ 새 팀 만들기</button>
+   </div>
+   <button style="margin-top:14px" onclick="saveTrip()">저장</button>`;
+  openM();$('tm').value=trip().mode;renderTripPeopleList();renderTripTeamsList();renderTripFavSelect();
+}
+function renderTripPeopleList(){
+  let x=trip(),el=$('tripPeopleList');if(!el)return;
+  el.innerHTML=x.people.map(p=>`<span class="chip">${esc(p.name)}${p.team?` · ${esc(teamName(x,p.team))}`:''} <span style="cursor:pointer;font-weight:800" onclick="removeTripPerson('${p.id}')">✕</span></span>`).join('')||'<span class="muted">아직 추가된 참석자가 없습니다.</span>';
+}
+function renderTripFavSelect(){
+  let x=trip(),el=$('tpFavSelect');if(!el)return;
+  let used=new Set(x.people.map(p=>p.name));
+  let avail=(db.favoritePeople||[]).filter(f=>!used.has(f.name));
+  el.innerHTML=`<option value="">⭐ 즐겨찾는 사람 선택… (${avail.length}명)</option>${avail.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}`;
+}
+function addTripPersonFromFav(){
+  let sel=$('tpFavSelect');if(!sel||!sel.value)return;
+  let fav=(db.favoritePeople||[]).find(f=>f.id===sel.value);if(!fav)return;
+  let x=trip();x.people.push({id:uid(),name:fav.name,team:''});
+  save();renderTripPeopleList();renderTripTeamsList();renderTripFavSelect();
+}
+function addTripPerson(){
+  let x=trip(),name=($('tpNewName').value||'').trim();
+  if(!name)return;
+  x.people.push({id:uid(),name,team:''});
+  addFavoritePerson(name);
+  save();$('tpNewName').value='';renderTripPeopleList();renderTripTeamsList();renderTripFavSelect();$('tpNewName').focus();
+}
+function removeTripPerson(id){
+  if(!confirm('이 참석자를 삭제할까요?'))return;
+  removePersonCore(id);renderTripPeopleList();renderTripTeamsList();renderTripFavSelect();
+}
+function renderTripTeamsList(){
+  let x=trip(),el=$('tripTeamsList');if(!el)return;
+  el.innerHTML=x.teams.map(t=>`<div class="card" style="padding:10px;margin-bottom:8px;background:#f8fafc">
+    <div class="row between"><b>👥 ${esc(t.name)}</b><button class="red small" onclick="deleteTripTeam('${t.id}')">삭제</button></div>
+    <div class="chiplist" style="margin-top:6px">${x.people.map(p=>`<span class="chip ${p.team===t.id?'on':''}" onclick="toggleTripTeamMember('${t.id}','${p.id}')">${esc(p.name)}</span>`).join('')||'<span class="muted">참석자를 먼저 추가하세요.</span>'}</div>
+  </div>`).join('')||'<div class="muted">구성된 팀이 없습니다. 참석자를 팀 단위로 정산하려면 팀을 만들어보세요.</div>';
+}
+function showTripNewTeamRow(){$('tripNewTeamRow').style.display='flex';$('tripNewTeamName').focus()}
+function confirmAddTripTeam(){
+  let name=($('tripNewTeamName').value||'').trim();if(!name)return;
+  let x=trip();x.teams.push({id:uid(),name});save();
+  $('tripNewTeamName').value='';$('tripNewTeamRow').style.display='none';
+  renderTripTeamsList();
+}
+function toggleTripTeamMember(teamId,personId){
+  let x=trip(),p=x.people.find(z=>z.id===personId);if(!p)return;
+  p.team=(p.team===teamId)?'':teamId;
+  save();renderTripTeamsList();renderTripPeopleList();
+}
+function deleteTripTeam(teamId){
+  if(!confirm('이 팀을 삭제할까요? (팀원은 미배정 상태가 됩니다)'))return;
+  let x=trip();x.teams=x.teams.filter(t=>t.id!==teamId);x.people.forEach(p=>{if(p.team===teamId)p.team=''});
+  save();renderTripTeamsList();renderTripPeopleList();
+}
+function favoritePeopleManager(){
+  $('sheet').innerHTML=`<h2>⭐ 자주 다니는 사람 관리</h2><div class="muted" style="margin-bottom:8px">여기 등록해두면 새 여행의 참석자를 추가할 때 드롭다운에서 타이핑 없이 바로 선택할 수 있습니다. 여행을 완료하거나 참석자를 새로 입력하면 자동으로도 추가됩니다.</div>
+   <div id="favPeopleList" class="chiplist"></div>
+   <div class="row" style="gap:6px;margin-top:8px"><input id="favNewName" placeholder="이름 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();addFavPersonManual()}"><button class="gray" onclick="addFavPersonManual()">＋ 추가</button></div>`;
+  openM();renderFavPeopleList();
+}
+function renderFavPeopleList(){
+  let el=$('favPeopleList');if(!el)return;
+  el.innerHTML=(db.favoritePeople||[]).map(f=>`<span class="chip">${esc(f.name)} <span style="cursor:pointer;font-weight:800" onclick="removeFavPerson('${f.id}')">✕</span></span>`).join('')||'<span class="muted">등록된 사람이 없습니다. 이름을 입력해 추가해보세요.</span>';
+}
+function addFavPersonManual(){
+  let name=($('favNewName').value||'').trim();if(!name)return;
+  addFavoritePerson(name);save();$('favNewName').value='';renderFavPeopleList();
+}
+function removeFavPerson(id){
+  db.favoritePeople=(db.favoritePeople||[]).filter(f=>f.id!==id);save();renderFavPeopleList();
+}
+function saveTrip(){let x=trip();x.title=$('tn').value||'나의 여행';x.start=$('ts').value;x.end=$('te').value;x.mode=$('tm').value;mode=x.mode;save();closeM();render()}
+function installGuide(){
+  if(window.deferredPrompt){window.deferredPrompt.prompt();window.deferredPrompt.userChoice.then(()=>{window.deferredPrompt=null});return;}
+  let ua=navigator.userAgent,isIOS=/iPhone|iPad|iPod/.test(ua);
+  let isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(isStandalone){alert('이미 "나의 여행 수첩" 앱으로 설치되어 실행 중입니다 🎉');return}
+  alert(isIOS
+    ? '📲 아이폰(Safari)에서 홈 화면에 설치하기\n\n1. 하단 공유 버튼(⬆️)을 누르세요.\n2. 아래로 스크롤해 "홈 화면에 추가"를 선택하세요.\n3. 이름이 "나의 여행 수첩"으로 되어 있는지 확인하고 "추가"를 누르세요.\n4. 홈 화면에 생긴 아이콘을 눌러 실행하면 앱처럼 전체화면으로 열립니다.\n\n※ 반드시 Safari 브라우저로 열어야 하며, 카카오톡 등 인앱 브라우저에서는 "홈 화면에 추가" 메뉴가 보이지 않을 수 있습니다. 그럴 땐 우측 상단 메뉴에서 "다른 브라우저로 열기"를 먼저 선택하세요.'
+    : '📲 안드로이드(Chrome)에서 앱으로 설치하기\n\n1. 우측 상단 메뉴(⋮)를 누르세요.\n2. "앱 설치" 또는 "홈 화면에 추가"를 선택하세요.\n3. 설치를 확인하면 다른 앱들처럼 앱 서랍/홈 화면에 "나의 여행 수첩" 아이콘이 생깁니다.\n\n※ 메뉴에 "앱 설치"가 보이지 않으면, 이 파일이 https 웹 호스팅으로 열려 있는지 확인해주세요. file://로 직접 연 경우 일부 기기에서 설치 메뉴가 나타나지 않을 수 있습니다.');
+}
+
+/* ---------- 일정(plan) : 날짜별 탭 + 스와이프 ---------- */
+function planAllDates(x){return ['ALL',...dayDates(x)]}
+function plan(){
+  let x=trip(),events=activeEvents(x),dates=dayDates(x);
+  if(!window.planDate||(window.planDate!=='ALL'&&!dates.includes(window.planDate)))window.planDate=dates[0]||'ALL';
+  let shown=(window.planDate==='ALL'?events.slice():events.filter(e=>e.date===window.planDate)).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  let dayTotal=shown.reduce((s,e)=>s+(+e.cost||0),0);
+  $('app').innerHTML=`<div class="tabs"><button onclick="eventForm()">＋ 일정 추가</button><button class="gray" onclick="importForm()">📥 일정 가져오기</button>${mode==='tour'?'<button class="gray" onclick="recommend()">✨ 주변 추천</button>':''}</div>
+   <div class="daytabs" id="planDayTabs"><button class="${window.planDate==='ALL'?'active':''}" onclick="setPlanDate('ALL')">전체</button>${dates.map(d=>`<button class="${d===window.planDate?'active':''}" onclick="setPlanDate('${d}')">${esc(d.slice(5).replace('-','/'))}</button>`).join('')||''}</div>
+   ${dates.length?`<div class="muted" style="margin:-4px 0 8px">👈 좌우로 밀어서 날짜를 이동할 수 있어요${window.planDate!=='ALL'?' · 이 날짜 비용 합계 '+won(dayTotal):''}</div>`:'<div class="muted" style="margin:-4px 0 8px">여행 시작일/종료일을 입력하면 날짜별 탭이 자동으로 생성됩니다.</div>'}
+   <div id="planDayBody">${shown.map(e=>planEventCard(x,e)).join('')||'<div class="card">이 날짜에 등록된 일정이 없습니다. ‘일정 추가’를 눌러 시간·장소·이동시간·비용·결제자를 입력하세요.</div>'}</div>`;
+  setupPlanSwipe();
+}
+function setPlanDate(d){window.planDate=d;plan()}
+function planEventCard(x,e){
+  return `<div class="schedule ${e.done?'done':''}">
+    <div class="row between"><span class="badge">${esc(e.time||'시간 미정')}</span>${bookingBadge(e)}</div>
+    <div class="st">${esc(e.title)}</div>
+    <div class="muted">📍 ${esc(e.place)}${e.transport?` · 🚗 ${esc(e.transport)}`:''}${e.travelTime?` · ⏱️ 이동 ${esc(e.travelTime)}`:''}</div>
+    <div class="muted">🏷️ ${esc(e.category||'기타')}</div>
+    ${e.cost>0?`<div class="muted">💳 ${won(e.cost)} · ${esc(nameById(x,e.payer))} 결제 · ${esc(splitLabel(x,e))}</div>`:''}
+    ${e.detail?`<div class="muted">📝 ${esc(e.detail)}</div>`:''}
+    ${mode==='golf'&&e.recommendation?`<div class="muted">✨ ${esc(e.recommendType||'주변추천')}: ${esc(e.recommendPlace||'')} ${esc(e.recommendation)}</div>`:''}
+    ${(e.photos&&e.photos.length)?`<div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap">${e.photos.map((p,pi)=>`<img src="${p}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="photoViewerAt('${e.id}',${pi})">`).join('')}</div>`:''}
+    <div class="row" style="margin-top:7px;flex-wrap:wrap">
+      <button class="gray small" onclick="eventForm('${e.id}')">✏️ 수정</button>
+      <button class="mapbtn small" onclick="recommendFor('${e.id}')">✨ 주변추천</button>
+      <button class="mapbtn small" onclick="openEventMapById('${e.id}','naver')">🗺️ 네이버</button>
+      <button class="mapbtn small" onclick="openEventMapById('${e.id}','google')">📍 구글</button>
+      <button class="gray small" onclick="localEventsFor('${e.id}')">🎉 지역행사</button>
+      ${e.bookingStatus&&e.bookingStatus!=='none'?`<button class="gray small" onclick="bookingHelper('event','${e.id}')">🎫 예약</button><button class="gray small" onclick="cancelBooking('${e.id}')">${e.bookingStatus==='cancelled'?'↩️ 복원':'❌ 취소'}</button>`:''}
+      <button class="red small" onclick="delE('${e.id}')">🗑️ 삭제</button>
+      <button class="gray small" onclick="toggleE('${e.id}')"><span>${e.done?'완료<br>취소':'일정<br>완료'}</span></button>
+    </div>
+  </div>`;
+}
+function setupPlanSwipe(){
+  let el=$('planDayBody');if(!el)return;
+  let sx=0,sy=0;
+  el.ontouchstart=ev=>{let t=ev.touches[0];sx=t.clientX;sy=t.clientY};
+  el.ontouchend=ev=>{
+    let t=ev.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){
+      let all=planAllDates(trip()),idx=all.indexOf(window.planDate);if(idx<0)idx=0;
+      if(dx<0&&idx<all.length-1)setPlanDate(all[idx+1]);
+      else if(dx>0&&idx>0)setPlanDate(all[idx-1]);
+    }
+  };
+}
+function eventForm(id){
+  let x=trip(),e=id?activeEvents(x).find(z=>z.id===id):null;
+  window.tmpSplit=e&&e.splitScope==='custom'?[...(e.splitWith||[])]:[];window.tmpSplitTeam=e&&e.splitScope==='team'?(e.splitTeam||''):'';
+  window.tmpPhotos=e&&Array.isArray(e.photos)?[...e.photos]:[];
+  let defaultDate=x.start||'';
+  if(view==='plan'&&window.planDate&&window.planDate!=='ALL')defaultDate=window.planDate;
+  else if(view==='route'&&window.routeDate)defaultDate=window.routeDate;
+  $('sheet').innerHTML=`<h2>${e?'일정 수정':(mode==='golf'?'일정 추가':'관광 일정 추가')}</h2>
+   <div class="grid"><div><label>일자</label><input id="ed" type="date" value="${e?e.date:defaultDate}"></div><div><label>시간</label><input id="et" type="time" value="${e?e.time:''}"></div></div>
+   <label>하루 일정 구분</label><select id="eslot">${DAY_SLOTS.map(([k,l])=>`<option value="${k}" ${(e?.slot||'other')===k?'selected':''}>${l}</option>`).join('')}</select><label>일정명</label><input id="en" value="${e?esc(e.title):''}" placeholder="${mode==='golf'?'오전 1라운드':'가든스 바이 더 베이'}">
+   <label>장소</label><input id="ep" value="${e?esc(e.place):''}">
+   <label>이동수단</label><select id="etr">${['자차','도보','MRT/지하철','택시','렌터카','버스','항공'].map(o=>`<option ${e&&e.transport===o?'selected':''}>${o}</option>`).join('')}</select>
+   <label>예상 이동시간</label><input id="etime" value="${e?esc(e.travelTime||''):''}" placeholder="예: 15분, 1시간 30분">
+   <label>경로/교통 추천</label><textarea id="er">${e?esc(e.route):''}</textarea><label>세부 내용 / 비고</label><textarea id="edetail" rows="3" placeholder="예약정보, 주요 내용, 비고">${e?esc(e.detail||''):''}</textarea>
+   <label>📷 사진 첨부 (최대 4장)</label><input id="ephotoInput" type="file" accept="image/*" multiple onchange="handleEventPhotos(event)"><div id="ephotoPreview" class="chiplist" style="margin-top:6px"></div>
+   <div class="card" style="margin:10px 0;padding:12px;background:${mode==='golf'?'#f4fbf8':'#f7faff'}"><b>✨ 이 일정 주변 추천</b><div class="muted" style="margin:4px 0 8px">장소를 입력한 뒤 네이버지도·구글맵에서 맛집, 관광명소, 카페 등을 바로 찾아볼 수 있습니다.</div><div class="grid"><div><label>추천 유형</label><select id="ercat"><option>맛집</option><option>관광지</option><option>카페</option><option>쇼핑</option><option>마사지</option><option>기타</option></select></div><div><label>추천 장소</label><input id="erplace" value="${e?esc(e.recommendPlace||''):''}" placeholder="예: ${mode==='golf'?'골프장 인근 맛집':'호텔 주변 맛집'}"></div></div><label>추천 내용 / 링크 메모</label><textarea id="errec" placeholder="추천 장소, 예약 정보, 메모 등을 저장">${e?esc(e.recommendation||''):''}</textarea><div class="maplinks"><button class="mapbtn small" type="button" onclick="recommendForEventForm()">✨ 주변추천 찾기</button><button class="mapbtn small" type="button" onclick="openEventNaverMap()">🗺️ 네이버지도</button><button class="mapbtn small" type="button" onclick="openEventGoogleMap()">📍 구글맵</button></div><div id="roundRecResult" class="muted" style="margin-top:6px"></div></div>
+   <label>항목 분류</label><select id="ecat">${CATS.map(c=>`<option ${e?(e.category===c?'selected':''):(c==='기타'?'selected':'')}>${c}</option>`).join('')}</select>
+   <label>비용</label><input id="ec" type="number" value="${e?e.cost:0}">
+   <label>결제자</label><select id="epay"><option value="">미지정</option>${x.people.map(p=>`<option value="${p.id}" ${e&&e.payer===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select>
+   <label>비용 분담 대상</label><select id="esplit" onchange="renderEventSplitArea()">
+     <option value="all" ${(!e||e.splitScope==='all')?'selected':''}>전체 인원 균등</option>
+     <option value="custom" ${e&&e.splitScope==='custom'?'selected':''}>특정 인원 지정</option>
+     <option value="team" ${e&&e.splitScope==='team'?'selected':''}>특정 팀 전체</option>
+   </select>
+   <div id="eSplitArea"></div>
+   <label>예약 여부</label><select id="ebs">
+     <option value="none" ${(!e||!e.bookingStatus||e.bookingStatus==='none')?'selected':''}>예약 불필요/해당없음</option>
+     <option value="needed" ${e&&e.bookingStatus==='needed'?'selected':''}>예약 필요 (미완료)</option>
+     <option value="booked" ${e&&e.bookingStatus==='booked'?'selected':''}>예약 완료</option><option value="cancelled" ${e&&e.bookingStatus==='cancelled'?'selected':''}>예약 취소</option>
+   </select>
+   <label>예약 유형</label><select id="ebc">${Object.keys(BOOKING_LABELS).map(k=>`<option value="${k}" ${e?(e.bookingCategory===k?'selected':''):(k==='etc'?'selected':'')}>${BOOKING_LABELS[k]}</option>`).join('')}</select>
+   <button style="margin-top:12px" onclick="saveE('${id||''}')">저장</button>
+   ${e?`<button class="red" style="margin-top:8px" onclick="delE('${id}');closeM()">일정 삭제</button>`:''}`;
+  openM();renderEventSplitArea();renderEventPhotoPreview();
+}
+function renderEventPhotoPreview(){
+  let el=$('ephotoPreview');if(!el)return;
+  el.innerHTML=(window.tmpPhotos||[]).map((p,i)=>`<span class="chip" style="padding:3px 3px 3px 3px;gap:6px"><img src="${p}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;vertical-align:middle"> <span style="cursor:pointer;font-weight:800" onclick="removeEventPhoto(${i})">✕</span></span>`).join('')||'<span class="muted">첨부된 사진이 없습니다.</span>';
+}
+function handleEventPhotos(ev){
+  let files=Array.from(ev.target.files||[]);
+  window.tmpPhotos=window.tmpPhotos||[];
+  if(!files.length)return;
+  if(window.tmpPhotos.length+files.length>4){alert('사진은 최대 4장까지 첨부할 수 있습니다.');files=files.slice(0,Math.max(0,4-window.tmpPhotos.length))}
+  Promise.all(files.map(f=>compressReceipt(f))).then(list=>{
+    window.tmpPhotos.push(...list);
+    renderEventPhotoPreview();
+    ev.target.value='';
+  }).catch(()=>alert('사진을 불러오는 중 오류가 발생했습니다.'));
+}
+function removeEventPhoto(i){window.tmpPhotos.splice(i,1);renderEventPhotoPreview()}
+function photoViewer(src){$('sheet').innerHTML=`<div class="sheethead"><button class="back" onclick="closeM()">← 닫기</button><h2>📷 사진</h2><span></span></div><div class="card"><img src="${src}" style="width:100%;max-height:75vh;object-fit:contain;border-radius:12px"></div>`;openM()}
+function photoViewerAt(eventId,idx){let x=trip(),e=activeEvents(x).find(z=>z.id===eventId);if(!e||!e.photos||!e.photos[idx])return;photoViewer(e.photos[idx])}
+function renderEventSplitArea(){
+  let x=trip(),s=$('esplit').value;
+  if(s==='custom'){$('eSplitArea').innerHTML=`<label>분담 대상 선택</label><div class="chiplist">${x.people.map(p=>`<span class="chip ${window.tmpSplit.includes(p.id)?'on':''}" onclick="toggleEventSplit('${p.id}')">${esc(p.name)}</span>`).join('')||'<span class="muted">인원을 먼저 추가하세요.</span>'}</div>`}
+  else if(s==='team'){$('eSplitArea').innerHTML=`<label>대상 팀 선택</label><div class="chiplist">${x.teams.map(t=>`<span class="chip ${window.tmpSplitTeam===t.id?'on':''}" onclick="toggleEventTeamSplit('${t.id}')">👥 ${esc(t.name)}</span>`).join('')||'<span class="muted">팀을 먼저 구성하세요.</span>'}</div><div class="muted">팀을 선택하면 해당 팀원은 개인별 선택 대신 팀 전체로 정산됩니다.</div>`}
+  else $('eSplitArea').innerHTML='';
+}
+function toggleEventSplit(id){let i=window.tmpSplit.indexOf(id);if(i>-1)window.tmpSplit.splice(i,1);else window.tmpSplit.push(id);renderEventSplitArea()}
+function toggleEventTeamSplit(id){window.tmpSplitTeam=window.tmpSplitTeam===id?'':id;renderEventSplitArea()}
+function saveE(id){let x=trip(),s=$('esplit').value,arr=activeEvents(x);let data={date:$('ed').value,time:$('et').value,slot:$('eslot').value,title:$('en').value||'일정',place:$('ep').value,transport:$('etr').value,route:$('er').value,travelTime:$('etime')?$('etime').value:'',detail:$('edetail')?$('edetail').value:'',photos:[...(window.tmpPhotos||[])],category:$('ecat').value||'기타',cost:+$('ec').value||0,payer:$('epay').value,splitScope:s,splitWith:s==='custom'?[...window.tmpSplit]:[],splitTeam:s==='team'?window.tmpSplitTeam:'',done:false,bookingStatus:$('ebs').value,bookingCategory:$('ebc').value,recommendType:$('ercat')?$('ercat').value:'',recommendPlace:$('erplace')?$('erplace').value:'',recommendation:$('errec')?$('errec').value:''};if(id){let old=arr.find(z=>z.id===id);if(old){data.done=old.done;Object.assign(old,data)}}else{data.id=uid();arr.push(data)}setActiveEvents(x,arr);save();closeM();render()}
+function delE(id){let x=trip();setActiveEvents(x,activeEvents(x).filter(e=>e.id!==id));save();render()}
+function toggleE(id){let x=trip(),e=activeEvents(x).find(z=>z.id===id);if(e)e.done=!e.done;setActiveEvents(x,activeEvents(x));save();render()}
+
+/* ---------- 예약 도우미 ---------- */
+function getBookableItem(type,id){let x=trip();return type==='course'?x.golf.courses.find(z=>z.id===id):activeEvents(x).find(z=>z.id===id)}
+function setBookingStatus(type,id,status){let it=getBookableItem(type,id);if(it){it.bookingStatus=status;save();render()}}
+function bookingHelper(type,id){
+  let it=getBookableItem(type,id);if(!it)return;
+  let cat=it.bookingCategory||'etc';
+  let sites=BOOKING_SITES[cat]||BOOKING_SITES.etc;
+  let q=it.place||it.name||it.title||'';
+  window.bookingCtx={type,id,sites,q};
+  $('sheet').innerHTML=`<h2>🎫 예약 도우미 — ${esc(it.title||it.name)}</h2>
+   <div class="muted" style="margin-bottom:8px">${esc(TIPS[cat]||TIPS.etc)}</div>
+   ${sites.map((s,i)=>`<div class="card"><div class="row between"><b>${esc(s[0])}</b><button class="gray small" onclick="openBookingSite(${i})">가격 확인</button></div></div>`).join('')}
+   <div class="row" style="margin-top:8px;gap:8px">
+     <button class="green" onclick="setBookingStatus('${type}','${id}','booked');closeM()">✅ 예약 완료로 표시</button>
+     <button class="gray" onclick="closeM()">닫기</button>
+   </div>
+   <div class="muted" style="margin-top:8px">⚠️ 실시간 최저가를 자동 비교하는 기능은 아니며, 각 사이트로 이동해 직접 가격을 확인·비교하도록 도와드립니다.</div>`;
+  openM();
+}
+function openBookingSite(i){let ctx=window.bookingCtx;if(!ctx)return;let s=ctx.sites[i];if(!s)return;let q=(ctx.q||'')+' '+s[1];window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank')}
+
+/* ---------- 일정 가져오기(업로드/붙여넣기/Excel/PDF) ---------- */
+function importForm(){
+  $('sheet').innerHTML=`<h2>📥 일정 가져오기</h2>
+  <div class="muted">여행 일정표 형식의 Excel도 자동 분석합니다. <b>일차/구분/시간/출발지→도착지/주요 일정/비고</b> 형태의 표를 인식하고 날짜·시간·일정명·장소·세부내용·비용으로 변환합니다.</div>
+  <label>파일 업로드</label><input id="imf" type="file" accept=".txt,.csv,.xlsx,.xls,.pdf" onchange="handleImportFile(event)">
+  <div class="dz">또는 아래에 직접 붙여넣기</div>
+  <textarea id="imt" rows="8" placeholder="2026-08-24,09:00,관광 일정,서울→속초,0"></textarea>
+  <button style="margin-top:12px" onclick="runImport()">가져오기 실행</button><div id="importPreview"></div>`;
+  window.pendingImportItems=null;openM();
+}
+async function readTextSmart(file){
+  const buf=await file.arrayBuffer();
+  try{
+    return new TextDecoder('utf-8',{fatal:true}).decode(buf);
+  }catch(e){
+    try{return new TextDecoder('euc-kr').decode(buf)}
+    catch(e2){return new TextDecoder('utf-8').decode(buf)}
+  }
+}
+async function handleImportFile(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const ext=(f.name.split('.').pop()||'').toLowerCase();
+  try{
+    if(ext==='xlsx'||ext==='xls'){
+      if(typeof XLSX==='undefined')throw Error('Excel 라이브러리를 불러오지 못했습니다.');
+      const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:true});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:true});
+      const items=excelRowsToImportItems(rows);
+      window.pendingImportItems=items;
+      $('imt').value=items.map(it=>[it.date,it.time,it.title,it.place,it.cost].join(',')).join('\n');
+      $('importPreview').innerHTML=`<div class="card">📊 <b>${esc(f.name)}</b><br>총 ${items.length}개 일정으로 분석했습니다.<br><span class="muted">날짜·시간·구분·이동경로·세부내용을 확인한 뒤 [가져오기 실행]을 누르세요.</span></div>`;
+    }else if(ext==='pdf'){
+      if(!window.pdfjsLib)throw Error('PDF 라이브러리를 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
+      const pdf=await window.pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t='';
+      for(let i=1;i<=pdf.numPages;i++){const c=await (await pdf.getPage(i)).getTextContent();t+=c.items.map(it=>it.str).join(' ')+'\n'}
+      $('imt').value=t.trim();window.pendingImportItems=null;
+      $('importPreview').innerHTML=`<div class="card">📄 ${esc(f.name)} · ${pdf.numPages}페이지 텍스트 추출 완료. 내용을 확인 후 가져오세요.</div>`;
+    }else{
+      $('imt').value=await readTextSmart(f);window.pendingImportItems=null;
+      $('importPreview').innerHTML=`<div class="card">📄 ${esc(f.name)} 내용을 읽었습니다.</div>`;
+    }
+  }catch(err){window.pendingImportItems=null;$('importPreview').innerHTML=`<div class="warn">파일을 읽지 못했습니다: ${esc(err.message||err)}</div>`;}
+}
+function headerKey(h){return String(h??'').toLowerCase().replace(/[\s_\-./()·➔→]/g,'')}
+function findHeaderRow(rows){
+  let best={idx:-1,score:0};
+  rows.slice(0,15).forEach((r,i)=>{
+    const s=r.map(v=>headerKey(v)).join('|');
+    let score=0;
+    if(/일차|day/.test(s))score+=2;
+    if(/구분|분류|category|type/.test(s))score+=2;
+    if(/시간|시각|time/.test(s))score+=2;
+    if(/출발지.*도착지|장소|위치|route|place/.test(s))score+=2;
+    if(/주요일정|일정|내용|세부|detail|title/.test(s))score+=2;
+    if(/연락처|운영시간|비고|참고|note/.test(s))score+=1;
+    if(score>best.score)best={idx:i,score};
+  });
+  return best.idx>=0?best.idx:0;
+}
+function findCol(headers,names){
+  const hs=headers.map(headerKey);
+  for(const n of names){const k=headerKey(n);const i=hs.findIndex(h=>h===k||h.includes(k)||k.includes(h));if(i>=0)return i}
+  return -1;
+}
+function extractDateToken(v){
+  const s=String(v??'').trim();
+  let m=s.match(/\((\d{1,2})[./-](\d{1,2})(?:\s*[^)]*)?\)/)||s.match(/(\d{1,2})[./-](\d{1,2})/);
+  if(m)return `${String(+m[1]).padStart(2,'0')}/${String(+m[2]).padStart(2,'0')}`;
+  return excelDateValue(v);
+}
+function extractStartTime(v){
+  if(v instanceof Date&&!isNaN(v))return `${String(v.getHours()).padStart(2,'0')}:${String(v.getMinutes()).padStart(2,'0')}`;
+  const s=String(v??'').trim();
+  const m=s.match(/(\d{1,2}:\d{2})/); return m?m[1]:'';
+}
+function moneyFromText(s){
+  const m=String(s??'').replace(/,/g,'').match(/(\d+(?:\.\d+)?)\s*(?:원|만원)/);
+  if(!m)return 0; let n=+m[1]; if(/만원/.test(m[0]))n*=10000; return Math.round(n);
+}
+function classifySlot(cat){
+  const s=String(cat||'');
+  if(/조식/.test(s))return 'breakfast'; if(/중식|점심/.test(s))return 'lunch';
+  if(/석식|저녁/.test(s))return 'dinner'; if(/회식|만찬|야식/.test(s))return 'party';
+  if(/숙박|호텔|체크인|체크아웃/.test(s))return 'stay';
+  if(/오전/.test(s))return 'morning'; if(/오후/.test(s))return 'afternoon';
+  return 'other';
+}
+function excelRowsToImportItems(rows){
+  if(!rows||!rows.length)return [];
+  const hi=findHeaderRow(rows), headers=rows[hi]||[];
+  const di=findCol(headers,['일차','날짜','일자','date']), ci=findCol(headers,['구분','분류','category','type']);
+  const ti=findCol(headers,['시간','시각','time']), ri=findCol(headers,['출발지 ➔ 도착지','출발지도착지','경로','장소','위치','route','place']);
+  const ni=findCol(headers,['주요 일정 및 세부 내용','주요일정및세부내용','일정명','일정','내용','세부내용','title','detail']);
+  const bi=findCol(headers,['연락처 / 운영시간 및 비고','연락처운영시간및비고','비고','참고','note']);
+  const out=[];let currentDate='';
+  for(let r=hi+1;r<rows.length;r++){
+    const row=rows[r]||[]; if(!row.some(v=>String(v??'').trim()))continue;
+    const rawDay=di>=0?row[di]:''; let d=extractDateToken(rawDay);
+    if(d)currentDate=d; else d=currentDate;
+    const cat=ci>=0?String(row[ci]??'').trim():'일정';
+    const tmRaw=ti>=0?String(row[ti]??'').trim():'';
+    const tm=extractStartTime(row[ti]);
+    const place=ri>=0?String(row[ri]??'').trim():'';
+    const detail=ni>=0?String(row[ni]??'').trim():'';
+    const note=bi>=0?String(row[bi]??'').trim():'';
+    if(!d && !detail && !place)continue;
+    let cost=moneyFromText(`${detail} ${note}`);
+    const title=cat||'일정';
+    const detailParts=[]; if(tmRaw)detailParts.push(`예정시간: ${tmRaw}`); if(detail)detailParts.push(detail); if(note)detailParts.push(`비고: ${note}`);
+    out.push({date:d,time:tm,title,place,route:'',detail:detailParts.join('\n'),cost,category:cat||'기타',slot:classifySlot(cat)});
+  }
+  return out;
+}
+function excelDateValue(v){
+  if(v instanceof Date&&!isNaN(v))return `${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,'0')}-${String(v.getDate()).padStart(2,'0')}`;
+  let s=String(v??'').trim();
+  if(/^\d+(\.\d+)?$/.test(s)&&typeof XLSX!=='undefined'){let n=+s;if(n>20000&&n<60000){let d=XLSX.SSF.parse_date_code(n);return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`}}
+  return s;
+}
+function excelTimeValue(v){return extractStartTime(v)}
+function excelMoneyValue(v){return moneyFromText(v)||Number(String(v??'').replace(/[^0-9.-]/g,''))||0}
+function parseDateToken(tok,x){
+  if(!tok)return '';
+  tok=String(tok).trim();
+  let m=tok.match(/\((\d{1,2})[./-](\d{1,2})/)||tok.match(/^(\d{1,2})[./-](\d{1,2})$/);
+  if(m){let y=x.start?x.start.slice(0,4):String(new Date().getFullYear());return `${y}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}`}
+  m=tok.match(/^(\d{4})[-./](\d{1,2})[-./](\d{1,2})$/);if(m)return `${m[1]}-${String(+m[2]).padStart(2,'0')}-${String(+m[3]).padStart(2,'0')}`;
+  return '';
+}
+function parseImportLine(line,x){
+  line=line.trim();if(!line)return null;
+  let p=line.split(',').map(s=>s.trim());
+  if(p.length>=3){let d=parseDateToken(p[0],x),t=extractStartTime(p[1]);if(d||t)return {date:d,time:t,title:p[2]||'일정',place:p[3]||'',cost:p[4]?(+String(p[4]).replace(/[^0-9]/g,'')||0):0}}
+  let d='',t='',cost=0,rest=line,m=rest.match(/(\d{4}[-./]\d{1,2}[-./]\d{1,2}|\d{1,2}[./]\d{1,2})/);
+  if(m){d=parseDateToken(m[0],x);rest=rest.replace(m[0],'')}m=rest.match(/(\d{1,2}:\d{2})/);if(m){t=m[1];rest=rest.replace(m[0],'')}m=rest.match(/([\d,]+)\s*원/);if(m){cost=+m[1].replace(/,/g,'')||0;rest=rest.replace(m[0],'')}return {date:d,time:t,title:rest.replace(/^[\s,\-·:]+|[\s,\-·:]+$/g,'').trim()||'일정',place:'',cost}
+}
+function runImport(){
+  let x=trip(),items=window.pendingImportItems;
+  if(!items)items=($('imt').value||'').split(/\n+/).map(l=>parseImportLine(l,x)).filter(Boolean);
+  if(!items.length){$('importPreview').innerHTML='<div class="warn">가져올 수 있는 일정이 없습니다.</div>';return}
+  let arr=activeEvents(x);
+  items.forEach(it=>arr.push({id:uid(),date:parseDateToken(it.date,x)||it.date,time:it.time||'',slot:it.slot||classifySlot(it.category),title:it.title||'일정',place:it.place||'',transport:'자차',route:it.route||'',detail:it.detail||'',category:it.category||'기타',cost:+it.cost||0,payer:'',splitScope:'all',splitWith:[],splitTeam:'',bookingStatus:'none',bookingCategory:'etc',done:false,recommendType:'',recommendPlace:'',recommendation:''}));
+  setActiveEvents(x,arr);save();$('importPreview').innerHTML=`<div class="card">✅ ${items.length}건의 일정을 추가했습니다.</div>`;window.pendingImportItems=null;setTimeout(()=>{closeM();render()},900)
+}
+
+/* ---------- 동선/추천/지역행사 ---------- */
+const DAY_SLOTS=[['breakfast','🍳 조식'],['morning','🌤️ 오전 일정'],['lunch','🍜 중식'],['afternoon','☀️ 오후 일정'],['dinner','🍽️ 석식'],['party','🥂 회식'],['stay','🛏️ 숙박'],['other','📌 기타']];
+function dayDates(x){let ds=[...new Set(activeEvents(x).map(e=>e.date).filter(Boolean))];if(x.start&&x.end){let a=new Date(x.start+'T00:00:00'),b=new Date(x.end+'T00:00:00');while(a<=b){let d=localDateStr(a);if(!ds.includes(d))ds.push(d);a.setDate(a.getDate()+1)}}return ds.sort()}
+function route(){let x=trip(),dates=dayDates(x);if(!window.routeDate||!dates.includes(window.routeDate))window.routeDate=dates[0]||x.start||'';let evs=activeEvents(x).filter(e=>e.date===window.routeDate).sort((a,b)=>(a.time||'').localeCompare(b.time||''));$('app').innerHTML=`<div class="card"><div class="row between"><div><h3 style="margin:0">🗺️ 하루 동선</h3><div class="muted">일자별 조식·오전·중식·오후·석식·회식·숙박을 관리합니다. 각 일정은 복수 등록, 수정·삭제, 예약·취소, 주변 추천, 비용 입력이 가능합니다.</div></div><button onclick="eventForm()">＋ 일정</button></div></div><div class="daytabs">${dates.map(d=>`<button class="${d===window.routeDate?'active':''}" onclick="window.routeDate='${d}';route()">${esc(d.slice(5).replace('-','/'))}</button>`).join('')||'<span class="muted">여행 날짜를 입력하세요.</span>'}</div>${DAY_SLOTS.map(([slot,label])=>{let arr=evs.filter(e=>(e.slot||'other')===slot);return `<div class="card daysection"><h4>${label} <span class="muted">${arr.length?arr.length+'건':''}</span></h4>${arr.map(e=>`<div class="schedule ${e.done?'done':''}"><div class="row between"><div><span class="badge">${esc(e.time||'시간 미정')}</span> ${bookingBadge(e)}</div><div class="row"><button class="gray small" onclick="eventForm('${e.id}')">✏️</button><button class="red small" onclick="delE('${e.id}')">🗑️</button></div></div><div class="st">${esc(e.title)}</div><div class="muted">📍 ${esc(e.place)} · ${esc(e.transport||'')}${e.travelTime?` · ⏱️ 이동 ${esc(e.travelTime)}`:''}</div>${e.cost>0?`<div class="muted">💳 ${won(e.cost)} · ${esc(nameById(x,e.payer))} 결제 · ${esc(splitLabel(x,e))}</div>`:''}${e.detail?`<div class="muted">📝 ${esc(e.detail)}</div>`:''}${mode==='golf'&&e.recommendation?`<div class="muted">✨ ${esc(e.recommendType||'주변추천')}: ${esc(e.recommendPlace||'')} ${esc(e.recommendation)}</div>`:''}${(e.photos&&e.photos.length)?`<div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap">${e.photos.map((p,pi)=>`<img src="${p}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="photoViewerAt('${e.id}',${pi})">`).join('')}</div>`:''}<div class="row" style="margin-top:6px;flex-wrap:wrap"><button class="mapbtn small" onclick="recommendFor('${e.id}')">✨ 주변추천</button><button class="mapbtn small" onclick="openEventMapById('${e.id}','naver')">🗺️ 네이버</button><button class="mapbtn small" onclick="openEventMapById('${e.id}','google')">📍 구글</button><button class="gray small" onclick="localEventsFor('${e.id}')">🎉 지역행사</button><button class="gray small" onclick="bookingHelper('event','${e.id}')">🎫 예약</button><button class="gray small" onclick="cancelBooking('${e.id}')">${e.bookingStatus==='cancelled'?'↩️ 예약복원':'❌ 예약취소'}</button></div></div>`).join('')||'<div class="muted">등록된 일정이 없습니다.</div>'}</div>`}).join('')}`}
+function cancelBooking(id){let x=trip(),e=activeEvents(x).find(z=>z.id===id);if(e){e.bookingStatus=e.bookingStatus==='cancelled'?'needed':'cancelled';setActiveEvents(x,activeEvents(x));save();render()}}
+
+function mapQuery(base,type){return `${base||''} ${type||''}`.trim()}
+function openNaverMapQuery(q){if(!q)return;window.open('https://map.naver.com/p/search/'+encodeURIComponent(q),'_blank','noopener')}
+function openGoogleMapQuery(q){if(!q)return;window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q),'_blank','noopener')}
+function openEventNaverMap(){let q=mapQuery($('ep')?.value||$('en')?.value,$('ercat')?.value||'맛집');openNaverMapQuery(q)}
+function openEventGoogleMap(){let q=mapQuery($('ep')?.value||$('en')?.value,$('ercat')?.value||'맛집');openGoogleMapQuery(q)}
+function openEventMapById(id,provider){let e=activeEvents(trip()).find(z=>z.id===id);if(!e)return;let q=mapQuery(e.place||e.title,e.recommendType||'맛집');provider==='naver'?openNaverMapQuery(q):openGoogleMapQuery(q)}
+function recommendForEventForm(){let b=$('ep')?.value||$('en')?.value||'';let t=$('ercat')?.value||'맛집';if(!b){alert('먼저 일정의 장소를 입력해주세요.');return}recommend(b,t)}
+function recommendForRoundForm(){let b=$('ep')?.value||$('en')?.value||'골프장';let t=$('ercat')?.value||'맛집';if($('erplace')&&!$('erplace').value)$('erplace').value=b+' 주변';recommend(b,t)}
+function recommendFor(id){let e=activeEvents(trip()).find(z=>z.id===id);recommend(e?e.place||e.title:'', e?(e.recommendType||'맛집'):'맛집')}
+function recommend(prefill,typePrefill){
+  window.recBase=prefill||'';
+  $('sheet').innerHTML=`<h2>✨ 주변 맛집·관광 추천</h2><div class="muted" style="margin-bottom:8px">아래 버튼을 누르면 실제 네이버지도/구글맵 검색 결과로 이동합니다. 거리·영업시간·후기·메뉴·주차 등을 확인한 뒤 원하는 장소를 일정의 추천 메모에 저장하세요.</div><label>기준 장소</label><input id="rb" value="${esc(window.recBase)}" placeholder="예: 골프장, 호텔, 관광지"><label>추천 유형</label><select id="rt"><option ${typePrefill==='맛집'?'selected':''}>맛집</option><option ${typePrefill==='카페'?'selected':''}>카페</option><option ${typePrefill==='관광지'?'selected':''}>관광지</option><option ${typePrefill==='쇼핑'?'selected':''}>쇼핑</option><option ${typePrefill==='마사지'?'selected':''}>마사지</option><option ${typePrefill==='기타'?'selected':''}>기타</option></select><div class="maplinks" style="margin-top:12px"><button class="mapbtn" onclick="searchRecNaver()">🗺️ 네이버지도에서 찾기</button><button class="mapbtn" onclick="searchRecGoogle()">📍 구글맵에서 찾기</button></div><button class="gray" style="margin-top:8px" onclick="showRecLinks()">🔎 검색어 만들기</button><div id="ro"></div>`;
+  openM();showRecLinks();
+}
+function recQuery(){let b=$('rb')?.value||'';let t=$('rt')?.value||'맛집';return mapQuery(b,t)}
+function searchRecNaver(){let q=recQuery();if(!q){alert('기준 장소를 입력해주세요.');return}openNaverMapQuery(q)}
+function searchRecGoogle(){let q=recQuery();if(!q){alert('기준 장소를 입력해주세요.');return}openGoogleMapQuery(q)}
+function showRecLinks(){let q=recQuery();if($('ro'))$('ro').innerHTML=q?`<div class="card"><b>검색어</b><div class="muted">${esc(q)}</div><div class="maplinks"><button class="mapbtn small" onclick="searchRecNaver()">네이버지도</button><button class="mapbtn small" onclick="searchRecGoogle()">구글맵</button></div></div>`:''}
+function localEvents(place,date){
+  let month=date?(+String(date).split('-')[1]||''):'';
+  $('sheet').innerHTML=`<h2>🎉 지역 행사/이벤트 찾기</h2><label>지역/장소</label><input id="lep" value="${esc(place||'')}"><label>월(선택)</label><input id="lem" value="${month}"><button style="margin-top:12px" onclick="runLocalEvents()">행사 검색하기</button><div id="leOut"></div>`;
+  openM();
+}
+function localEventsFor(id){let e=activeEvents(trip()).find(z=>z.id===id);localEvents(e?e.place:'',e?e.date:'')}
+function runLocalEvents(){
+  let p=$('lep').value||'',m=$('lem').value||'';
+  window.leCtx={q1:`${p} 축제 행사 ${m?m+'월':''}`.trim(),q2:`${p} 지자체 문화행사 일정`};
+  $('leOut').innerHTML=`
+   <div class="card"><b>${esc(p)} 축제/행사 검색</b><div class="muted">해당 지역의 최신 축제·이벤트 정보를 확인하세요.</div><button class="gray" style="margin-top:8px" onclick="openLeSearch(1)">🔍 구글에서 검색</button></div>
+   <div class="card"><b>대한민국 구석구석 (문화체육관광부)</b><div class="muted">공식 축제·관광 정보 포털에서 찾아보세요.</div><button class="gray" style="margin-top:8px" onclick="window.open('https://korean.visitkorea.or.kr/main/main.do','_blank')">바로가기</button></div>
+   <div class="card"><b>지자체 문화관광 사이트 검색</b><button class="gray" style="margin-top:8px" onclick="openLeSearch(2)">🔍 검색하기</button></div>`;
+}
+function openLeSearch(n){let ctx=window.leCtx;if(!ctx)return;let q=n===1?ctx.q1:ctx.q2;window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank')}
+
+/* ---------- 비용 화면 ---------- */
+function captureCostSummary(){let node=document.getElementById('costShot');if(!node)return;html2canvas(node,{scale:2,backgroundColor:'#fff'}).then(canvas=>canvas.toBlob(async blob=>{let file=new File([blob],`${trip().title||'여행'}_비용현황.png`,{type:'image/png'});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'여행 비용 현황',text:'당일 및 누적 비용 현황입니다.'});}catch(e){}}else{let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();}}))}
+function money(){let x=trip(),items=collectCosts(x),total=items.reduce((s,i)=>s+i.cost,0),dates=[...new Set(items.map(i=>i.date).filter(Boolean))].sort(),cum=0;let days=dates.map(d=>{let day=items.filter(i=>i.date===d),sum=day.reduce((s,i)=>s+i.cost,0);cum+=sum;return{d,day,sum,cum}});let today=localDateStr();$('app').innerHTML=`<div id="costShot" class="costshot"><div class="statgrid"><div class="stat"><span class="muted">총 누적 비용</span><b>${won(total)}</b></div><div class="stat"><span class="muted">오늘 비용</span><b>${won(days.find(z=>z.d===today)?.sum||0)}</b></div></div><div class="muted" style="margin-top:8px">${mode==='golf'?'⛳ 골프 여행':'✈️ 일반 관광'} 비용만 표시됩니다.</div></div><div style="display:flex;justify-content:flex-end;margin:10px 0"><button onclick="captureCostSummary()">📸 동행자에게 공유</button></div>${days.map(d=>`<div class="card"><div class="row between"><h3 style="margin:0">${esc(d.d)}</h3><div style="text-align:right"><b>${won(d.sum)}</b><div class="muted">누적 ${won(d.cum)}</div></div></div>${d.day.map(i=>`<div class="row between" style="padding:8px 0;border-bottom:1px solid #eee"><span>${esc(i.label)}<br><small class="muted">${esc(i.category||'기타')} · ${esc(nameById(x,i.payer))} · ${i.targets.length}명</small></span><b>${won(i.cost)}</b></div>`).join('')}</div>`).join('')||'<div class="card muted">등록된 비용이 없습니다.</div>'}`}
+
+/* ---------- 정산(개인/팀/비용입력/인원관리/리포트) ---------- */
+function settle(){
+  $('app').innerHTML=`<div class="subtabs">
+    <button class="${settleTab==='individual'?'active':'gray'}" onclick="setSettleTab('individual')">👤 개인별</button><button class="${settleTab==='table'?'active':'gray'}" onclick="setSettleTab('table')">📊 정산표</button>
+    <button class="${settleTab==='team'?'active':'gray'}" onclick="setSettleTab('team')">👥 팀별</button>
+    <button class="${settleTab==='expense'?'active':'gray'}" onclick="setSettleTab('expense')">💸 비용입력</button>
+    <button class="${settleTab==='payment'?'active':'gray'}" onclick="setSettleTab('payment')">💵 회비/수납</button>
+    <button class="${settleTab==='people'?'active':'gray'}" onclick="setSettleTab('people')">🧑‍🤝‍🧑 인원/팀</button>
+    <button class="${settleTab==='report'?'active':'gray'}" onclick="setSettleTab('report')">📄 리포트</button>
+  </div><div id="settleBody"></div>`;
+  renderSettleBody();
+}
+function setSettleTab(t){settleTab=t;settle()}
+function renderSettleBody(){({individual:settleIndividual,table:settleTable,team:settleTeam,expense:settleExpense,payment:settlePayment,people:settlePeople,report:settleReport}[settleTab])()}
+
+function reconcilePanel(x){
+  let warnings=settlementWarnings(x);
+  if(!warnings.length)return `<div class="card" style="background:#eafbf3;border:1px solid #b7e9cf"><div class="row"><span style="font-size:20px">✅</span><div><b style="color:#087f5b">검산 완료</b><div class="muted" style="margin-top:2px">모든 지출 항목에 결제자와 분담 대상이 정확히 입력되어, 여정에서 입력한 금액이 정산에 빠짐없이 반영되었습니다.</div></div></div></div>`;
+  return `<div class="warn"><b>⚠️ 검산 필요 (${warnings.length}건)</b><div style="margin-top:6px">${warnings.map(w=>`· ${esc(w)}`).join('<br>')}</div></div>`;
+}
+function settleIndividual(){
+  let x=trip(),{net}=computeBalances(x);
+  let total=collectCosts(x).reduce((s,i)=>s+i.cost,0);
+  let debts=simplifyDebts(net);
+  $('settleBody').innerHTML=`
+   ${reconcilePanel(x)}
+   <div class="card"><h3>총 지출</h3><div class="big">${won(total)}</div><div class="muted">${x.people.length}명 균등 기준 1인당 ${won(x.people.length?total/x.people.length:0)}</div></div>
+   <div class="card"><h3>인원별 정산 요약</h3>${x.people.map(p=>`<div class="settlerow"><span>${esc(p.name)}</span><b style="color:${net[p.id]>=0?'#087f5b':'#b42318'}">${net[p.id]>=0?'+':''}${won(net[p.id])}</b></div>`).join('')||'<div class="muted">인원을 추가하세요.</div>'}<div class="muted" style="margin-top:6px">양수(+): 받아야 할 돈 · 음수: 더 내야 할 돈</div></div>
+   <div class="card"><h3>💰 송금 정리 (최소 이체 횟수)</h3>${debts.length?debts.map(d=>`<div class="settlerow"><span>${esc(nameById(x,d.from))} <span class="arrow">→</span> ${esc(nameById(x,d.to))}</span><b>${won(d.amt)}</b></div>`).join(''):'<div class="muted">정산할 금액이 없습니다.</div>'}</div>`;
+}
+function settleTable(){
+  let x=trip(),{net,paid,owed}=computeBalances(x);
+  let total=collectCosts(x).reduce((s,i)=>s+i.cost,0), received=(activePayments(x)||[]).reduce((s,r)=>s+(+r.amount||0),0);
+  let teamRows=[],teamNet={},teamPaid={},teamOwed={};
+  x.people.forEach(p=>{let k=p.team||'';teamNet[k]=(teamNet[k]||0)+net[p.id];teamPaid[k]=(teamPaid[k]||0)+paid[p.id];teamOwed[k]=(teamOwed[k]||0)+owed[p.id]});
+  let usedTeams=[...new Set(x.people.map(p=>p.team||''))];
+  let teamLabel=k=>k?teamName(x,k):'미배정';
+  if(settleView==='team'){
+    teamRows=usedTeams.map(k=>({id:k,label:teamLabel(k),paid:teamPaid[k]||0,owed:teamOwed[k]||0,net:teamNet[k]||0}));
+  }
+  let rows=settleView==='team'
+    ? teamRows.map(r=>`<tr><td><b>👥 ${esc(r.label)}</b></td><td>${won(r.paid)}</td><td>${won(r.owed)}</td><td>${r.net>=0?'<span class="pos">받음</span>':'<span class="neg">지급</span>'}</td><td><b>${r.net>=0?'+':''}${won(r.net)}</b></td></tr>`).join('')
+    : x.people.map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${won(paid[p.id])}</td><td>${won(owed[p.id])}</td><td>${net[p.id]>=0?'<span class="pos">받음</span>':'<span class="neg">지급</span>'}</td><td><b>${net[p.id]>=0?'+':''}${won(net[p.id])}</b></td></tr>`).join('');
+  let debtMap=settleView==='team'?teamNet:net;
+  let debts=simplifyDebts(debtMap);
+  let debtName=id=>settleView==='team'?teamLabel(id):nameById(x,id);
+  $('settleBody').innerHTML=`
+  <div class="statgrid"><div class="stat"><span class="muted">총 지출</span><b>${won(total)}</b></div><div class="stat"><span class="muted">회비/수납</span><b>${won(received)}</b></div></div>
+  <div class="card"><div class="row between"><h3 style="margin:0">📊 정산 기준</h3><div class="row"><button class="small ${settleView==='individual'?'active':''} ${settleView==='individual'?'':'gray'}" onclick="setSettleView('individual')">👤 개인별</button><button class="small ${settleView==='team'?'active':''} ${settleView==='team'?'':'gray'}" onclick="setSettleView('team')">👥 팀별</button></div></div><div class="muted" style="margin-top:7px">개인별: 전체 참석자를 각각 계산합니다. 팀별: 개인은 숨기고 팀명 단위로만 계산합니다.</div></div>
+  <div class="card"><h3>📊 ${settleView==='team'?'팀별':'개인별'} 최종 정산표</h3><div class="muted">실제 결제 + 회비/수납 − 부담액 = 최종 차액입니다. (+)는 받을 금액, (-)는 추가 지급액입니다.</div>${settlementWarnings(x).map(w=>`<div class="warn" style="margin-top:7px">⚠️ ${esc(w)}</div>`).join('')}
+  <div style="overflow:auto;margin-top:10px"><table class="settletable"><thead><tr><th>${settleView==='team'?'팀':'참석자'}</th><th>실제 결제</th><th>부담액</th><th>결과</th><th>차액</th></tr></thead><tbody>${rows||`<tr><td colspan="5">${settleView==='team'?'팀을 구성하세요.':'인원을 추가하세요.'}</td></tr>`}</tbody></table></div></div>
+  <div class="card"><h3>💰 ${settleView==='team'?'팀간':'개인간'} 최종 송금표</h3>${debts.length?debts.map(d=>`<div class="settlerow"><span><b>${esc(debtName(d.from))}</b> → <b>${esc(debtName(d.to))}</b></span><b>${won(d.amt)}</b></div>`).join(''):'<div class="muted">정산할 송금 내역이 없습니다.</div>'}</div>`;
+}
+function setSettleView(v){settleView=v;settleTab='table';renderSettleBody()}
+
+function settleTeam(){
+  let x=trip(),{net,paid,owed}=computeBalances(x);
+  let teamIds=[...x.teams.map(t=>t.id),''];
+  let teamNet={};teamIds.forEach(t=>teamNet[t]=0);
+  x.people.forEach(p=>{teamNet[p.team||'']=(teamNet[p.team||'']||0)+net[p.id]});
+  let labelOf=t=>t===''?'미배정':teamName(x,t);
+  let usedTeams=teamIds.filter(t=>x.people.some(p=>(p.team||'')===t));
+  let debts=simplifyDebts(teamNet);
+  let total=collectCosts(x).reduce((a,b)=>a+b.cost,0);
+  let received=(activePayments(x)||[]).reduce((a,b)=>a+(+b.amount||0),0);
+  let teamCards=usedTeams.map(t=>{
+    let members=x.people.filter(p=>(p.team||'')===t), cost=0, pay=0;
+    collectCosts(x).forEach(it=>{if(it.targets.some(id=>members.some(p=>p.id===id))) cost+=it.cost*(it.targets.filter(id=>members.some(p=>p.id===id)).length/(it.targets.length||1))});
+    (activePayments(x)||[]).forEach(r=>{if(members.some(p=>p.id===r.payer))pay+=+r.amount||0});
+    return `<div class="card"><div class="row between"><div><b>${esc(labelOf(t))}</b><div class="muted">${members.length}명 · 부담 ${won(cost)} · 회비/수납 ${won(pay)}</div></div><b style="color:${teamNet[t]>=0?'#087f5b':'#b42318'}">${teamNet[t]>=0?'+':''}${won(teamNet[t])}</b></div></div>`;
+  }).join('');
+  $('settleBody').innerHTML=`
+   ${reconcilePanel(x)}
+   <div class="statgrid"><div class="stat"><span class="muted">총 지출</span><b>${won(total)}</b></div><div class="stat"><span class="muted">회비/수납</span><b>${won(received)}</b></div></div>
+   <div class="card" style="margin-top:10px"><div class="row between"><h3 style="margin:0">👥 팀별 정산</h3><button class="small" onclick="setSettleTab('payment')">＋ 회비 입력</button></div>${teamCards||'<div class="muted" style="margin-top:8px">팀을 구성하세요.</div>'}</div>
+   <div class="card"><h3>💰 팀간 송금 정리</h3>${debts.length?debts.map(d=>`<div class="settlerow"><span>${esc(labelOf(d.from))} <span class="arrow">→</span> ${esc(labelOf(d.to))}</span><b>${won(d.amt)}</b></div>`).join(''):'<div class="muted">정산할 금액이 없습니다.</div>'}</div>
+   <div class="card"><h3>📌 팀 정산 사용법</h3><div class="muted">① 인원을 개별 추가 → ② A팀/B팀 구성 → ③ 회비/수납 입력 → ④ 비용에서 ‘특정 팀 전체’ 또는 ‘특정 인원’으로 지출 분담 → ⑤ 개인별·팀별 송금액을 확인하세요.</div></div>`;
+}
+function settleExpense(){
+  let x=trip();
+  $('settleBody').innerHTML=`<div class="row between"><h3 style="margin:6px 0">💸 추가 비용(지출) 목록</h3><button onclick="expenseForm()">＋ 비용 추가</button></div>
+   <div class="muted" style="margin-bottom:8px">일정에 포함되지 않은 팁, 간식, 개별 결제 비용 등을 결제자와 분담 대상을 지정해 입력하세요. 지출 대상이 사람마다 다를 때 유용합니다.</div>
+   ${(activeExpenses(x)||[]).map(e=>`<div class="card"><div class="row between"><div><b>${esc(e.title)}</b><div class="muted">${esc(e.date||'')} · 🏷️${esc(e.category||'기타')} · 결제자: ${esc(nameById(x,e.payer))}</div><div class="muted">분담: ${esc(splitLabel(x,e))}${e.receiptImage?' · 🧾 영수증 첨부':''}</div>${e.receiptImage?`<button class="gray small" style="margin-top:6px" onclick="viewReceipt('${e.id}')">🧾 영수증 보기</button>`:''}</div><b>${won(e.amount)}</b></div><div class="row" style="margin-top:8px;justify-content:flex-end;gap:6px"><button class="gray small" onclick="expenseForm('${e.id}')">수정</button><button class="red small" onclick="delExpense('${e.id}')">삭제</button></div></div>`).join('')||'<div class="card muted">등록된 추가 비용이 없습니다.</div>'}`;
+}
+function expenseForm(id){
+  let x=trip(),e=id?(activeExpenses(x)||[]).find(z=>z.id===id):null;
+  window.tmpSplit=e&&e.splitScope==='custom'?[...(e.splitWith||[])]:[];window.tmpSplitTeam=e&&e.splitScope==='team'?(e.splitTeam||''):'';
+  window.currentReceipt=e?{image:e.receiptImage||'',text:e.receiptText||'',merchant:e.receiptMerchant||'',date:e.receiptDate||'',amount:e.receiptAmount||0}:{};
+  $('sheet').innerHTML=`<h2>${e?'비용 수정':'비용 추가'}</h2>
+   <div class="card" style="background:#f7fbff;border:1px solid #dcecff"><b>🧾 영수증 자동입력</b><div class="muted" style="margin-top:4px">영수증을 촬영하거나 사진을 선택하면 날짜·사용처·결제금액을 자동으로 읽습니다. 인식 결과는 저장 전에 직접 수정할 수 있습니다.</div>
+   <div class="receipt-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+     <button type="button" class="camera-btn" onclick="openReceiptCamera()" style="padding:13px 10px;font-size:14px">📷 카메라 촬영</button>
+     <button type="button" class="gray" onclick="openReceiptGallery()" style="padding:13px 10px;font-size:14px">🖼️ 파일첨부</button>
+   </div>
+   <input id="receiptCamera" type="file" accept="image/*" capture="environment" style="display:none" onchange="scanReceipt(event)">
+   <input id="receiptGallery" type="file" accept="image/*" style="display:none" onchange="scanReceipt(event)">
+   <div id="receiptStatus" class="muted" style="margin-top:7px">${e&&e.receiptImage?'📎 저장된 영수증이 있습니다.':'카메라 촬영 또는 갤러리 사진을 선택하세요.'}</div><div id="receiptPreview" style="margin-top:8px">${e&&e.receiptImage?`<img src="${e.receiptImage}" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid #ddd">`:''}</div></div>
+   <label>내용 / 사용처</label><input id="exn" value="${e?esc(e.title):''}" placeholder="예: ○○식당 저녁 식사">
+   <div class="grid"><div><label>날짜</label><input id="exd" type="date" value="${e?e.date:(x.start||'')}"></div><div><label>금액</label><input id="exa" type="number" value="${e?e.amount:0}"></div></div>
+   <label>영수증 인식 메모</label><textarea id="receiptText" rows="3" placeholder="OCR 원문이 여기에 보관됩니다.">${e?esc(e.receiptText||''):''}</textarea>
+   <label>항목 분류</label><select id="excat">${CATS.map(c=>`<option ${e?(e.category===c?'selected':''):(c==='기타'?'selected':'')}>${c}</option>`).join('')}</select>
+   <label>결제자</label><select id="exp"><option value="">미지정</option>${x.people.map(p=>`<option value="${p.id}" ${e&&e.payer===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select>
+   <label>분담 방식</label><select id="exs" onchange="renderSplitArea()">
+     <option value="all" ${(!e||e.splitScope==='all')?'selected':''}>전체 인원 균등</option>
+     <option value="custom" ${e&&e.splitScope==='custom'?'selected':''}>특정 인원 지정</option>
+     <option value="team" ${e&&e.splitScope==='team'?'selected':''}>특정 팀 전체</option>
+   </select><div id="splitArea"></div>
+   <button style="margin-top:12px" onclick="saveExpense('${id||''}')">저장</button>
+   ${e?`<button class="red" style="margin-top:8px" onclick="delExpense('${id}');closeM()">삭제</button>`:''}`;
+  openM();renderSplitArea();
+}
+function openReceiptCamera(){const el=$('receiptCamera');if(el){el.value='';el.click()}}
+function openReceiptGallery(){const el=$('receiptGallery');if(el){el.value='';el.click()}}
+
+function compressReceipt(file){return new Promise((resolve,reject)=>{let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let max=1400,w=im.width,h=im.height;if(Math.max(w,h)>max){if(w>=h){h=Math.round(h*max/w);w=max}else{w=Math.round(w*max/h);h=max}}let c=document.createElement('canvas');c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(im,0,0,w,h);resolve(c.toDataURL('image/jpeg',.76))};im.onerror=reject;im.src=r.result};r.onerror=reject;r.readAsDataURL(file)})}
+function parseReceiptText(text){
+  let t=(text||'').replace(/\s+/g,' ').trim(),merchant='';
+  let merchantPatterns=[/(?:상호|가맹점|사용처|merchant|store)\s*[:：]?\s*([^|,]{2,40})/i,/(?:업체명|상호명)\s*[:：]?\s*([^|,]{2,40})/i];
+  for(let re of merchantPatterns){let m=t.match(re);if(m){merchant=m[1].trim();break}}
+  if(!merchant){let m=t.match(/([가-힣A-Za-z0-9][가-힣A-Za-z0-9 .&()_-]{2,30}(?:점|식당|카페|마트|호텔|CC|골프장))/);if(m)merchant=m[1].trim()}
+  let date='';let dm=t.match(/(20\d{2})[.\-/년 ]\s*(\d{1,2})[.\-/월 ]\s*(\d{1,2})/);if(dm)date=`${dm[1]}-${String(dm[2]).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;else{let dm2=t.match(/(\d{1,2})[.\-/월 ]\s*(\d{1,2})/);if(dm2){let y=new Date().getFullYear();date=`${y}-${String(dm2[1]).padStart(2,'0')}-${String(dm2[2]).padStart(2,'0')}`}}
+  let amount=0,nums=[...t.matchAll(/(?:합계|총액|결제금액|승인금액|amount|total|결제)\D{0,12}([0-9]{1,3}(?:[, ]?[0-9]{3})+|[0-9]{4,9})\s*원?/gi)];if(nums.length)amount=Number(nums[nums.length-1][1].replace(/[, ]/g,''));if(!amount){let all=[...t.matchAll(/([0-9]{1,3}(?:[, ]?[0-9]{3})+|[0-9]{4,9})\s*원/g)];if(all.length)amount=Number(all[all.length-1][1].replace(/[, ]/g,''))}
+  return {merchant,date,amount,text:t}
+}
+async function scanReceipt(ev){
+  let f=ev.target.files&&ev.target.files[0];if(!f)return;let status=$('receiptStatus');status.textContent='🧾 영수증 이미지를 준비하고 있습니다...';
+  try{
+    let image=await compressReceipt(f);window.currentReceipt=window.currentReceipt||{};window.currentReceipt.image=image;$('receiptPreview').innerHTML=`<img src="${image}" style="max-width:100%;max-height:220px;border-radius:10px;border:1px solid #ddd">`;
+    status.textContent='🔎 영수증을 분석 중입니다... (사진에 따라 10~30초 정도 걸릴 수 있습니다)';
+    if(!window.Tesseract)throw Error('OCR 엔진을 불러오지 못했습니다. 인터넷 연결 후 다시 시도해주세요.');
+    let result=await Tesseract.recognize(image,'kor+eng',{logger:m=>{if(m.status==='recognizing text')status.textContent=`🔎 영수증 분석 중... ${Math.round((m.progress||0)*100)}%`}});
+    let parsed=parseReceiptText(result.data.text||'');window.currentReceipt={image,text:result.data.text||'',merchant:parsed.merchant,date:parsed.date,amount:parsed.amount};
+    if(parsed.merchant&&!$('exn').value)$('exn').value=parsed.merchant;
+    if(parsed.date)$('exd').value=parsed.date;
+    if(parsed.amount)$('exa').value=parsed.amount;
+    $('receiptText').value=result.data.text||'';status.textContent=`✅ 자동입력 완료 · 사용처 ${parsed.merchant||'미인식'} · 금액 ${parsed.amount?won(parsed.amount):'미인식'} · 날짜 ${parsed.date||'미인식'}`;
+  }catch(err){status.textContent='⚠️ 자동 인식에 실패했습니다. 사진은 보관되며 아래 내용을 직접 입력할 수 있습니다.';console.error(err)}
+}
+function renderSplitArea(){
+  let x=trip(),s=$('exs').value;
+  if(s==='custom')$('splitArea').innerHTML=`<label>분담 대상 선택</label><div class="chiplist">${x.people.map(p=>`<span class="chip ${window.tmpSplit.includes(p.id)?'on':''}" onclick="toggleSplit('${p.id}')">${esc(p.name)}</span>`).join('')||'<span class="muted">인원을 먼저 추가하세요.</span>'}</div>`;
+  else if(s==='team')$('splitArea').innerHTML=`<label>대상 팀 선택</label><div class="chiplist">${x.teams.map(t=>`<span class="chip ${window.tmpSplitTeam===t.id?'on':''}" onclick="toggleExpenseTeamSplit('${t.id}')">👥 ${esc(t.name)}</span>`).join('')||'<span class="muted">팀을 먼저 구성하세요.</span>'}</div><div class="muted">선택한 팀 전체가 하나의 정산 단위로 계산됩니다.</div>`;
+  else $('splitArea').innerHTML='';
+}
+function toggleSplit(id){let i=window.tmpSplit.indexOf(id);if(i>-1)window.tmpSplit.splice(i,1);else window.tmpSplit.push(id);renderSplitArea()}
+function toggleExpenseTeamSplit(id){window.tmpSplitTeam=window.tmpSplitTeam===id?'':id;renderSplitArea()}
+function saveExpense(id){let x=trip(),s=$('exs').value,arr=activeExpenses(x),r=window.currentReceipt||{},data={title:$('exn').value||r.merchant||'비용',date:$('exd').value||r.date||'',amount:+$('exa').value||r.amount||0,category:$('excat').value||'기타',payer:$('exp').value,splitScope:s,splitWith:s==='custom'?[...window.tmpSplit]:[],splitTeam:s==='team'?window.tmpSplitTeam:'',receiptImage:r.image||'',receiptText:$('receiptText')?.value||r.text||'',receiptMerchant:r.merchant||'',receiptDate:r.date||'',receiptAmount:+r.amount||0};if(id){let o=arr.find(z=>z.id===id);if(o)Object.assign(o,data)}else{data.id=uid();arr.push(data)}setActiveExpenses(x,arr);save();closeM();renderSettleBody()}
+function viewReceipt(id){let x=trip(),e=(activeExpenses(x)||[]).find(z=>z.id===id);if(!e||!e.receiptImage)return;$('sheet').innerHTML=`<div class="sheethead"><button class="back" onclick="closeM()">← 닫기</button><h2>🧾 영수증 증빙</h2><span></span></div><div class="card"><img src="${e.receiptImage}" style="width:100%;max-height:70vh;object-fit:contain;border-radius:12px"><div class="muted" style="margin-top:8px">${esc(e.title||'비용')} · ${esc(e.date||'')} · ${won(e.amount)}</div>${e.receiptText?`<details style="margin-top:8px"><summary>OCR 원문 보기</summary><div class="muted" style="white-space:pre-wrap;margin-top:6px">${esc(e.receiptText)}</div></details>`:''}</div>`;openM()}
+function delExpense(id){let x=trip();setActiveExpenses(x,activeExpenses(x).filter(z=>z.id!==id));save();renderSettleBody()}
+function settlePayment(){
+  let x=trip();
+  $('settleBody').innerHTML=`<div class="row between"><h3 style="margin:6px 0">💵 회비/수납 내역</h3><button onclick="paymentForm()">＋ 회비 입력</button></div>
+   <div class="muted" style="margin-bottom:8px">미리 걷은 회비, 현금 수납, 선입금 등을 입력하면 실제 결제자로 반영되어 최종 정산에서 자동 차감됩니다.</div>
+   ${(activePayments(x)||[]).map(r=>`<div class="card"><div class="row between"><div><b>${esc(r.title)}</b><div class="muted">${esc(r.date||'')} · 수납자: ${esc(nameById(x,r.payer))}${r.team?` · ${esc(teamName(x,r.team))}`:''}</div></div><b>${won(r.amount)}</b></div><div class="row" style="margin-top:8px;justify-content:flex-end;gap:6px"><button class="gray small" onclick="paymentForm('${r.id}')">수정</button><button class="red small" onclick="delPayment('${r.id}')">삭제</button></div></div>`).join('')||'<div class="card muted">등록된 회비/수납이 없습니다.</div>'}`;
+}
+function paymentForm(id){
+  let x=trip(),r=id?(activePayments(x)||[]).find(z=>z.id===id):null;
+  $('sheet').innerHTML=`<h2>${r?'회비/수납 수정':'회비/수납 입력'}</h2><label>내용</label><input id="pyn" value="${r?esc(r.title):'여행 회비'}"><div class="grid"><div><label>날짜</label><input id="pyd" type="date" value="${r?r.date:(x.start||'')}"></div><div><label>금액</label><input id="pya" type="number" value="${r?r.amount:0}"></div></div><label>실제 납부자</label><select id="pyp"><option value="">미지정</option>${x.people.map(p=>`<option value="${p.id}" ${r&&r.payer===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select><label>소속 팀(선택)</label><select id="pyt"><option value="">팀 미지정</option>${x.teams.map(t=>`<option value="${t.id}" ${r&&r.team===t.id?'selected':''}>${esc(t.name)}</option>`).join('')}</select><button style="margin-top:12px" onclick="savePayment('${id||''}')">저장</button>${r?`<button class="red" style="margin-top:8px" onclick="delPayment('${id}');closeM()">삭제</button>`:''}`;
+  openM();
+}
+function savePayment(id){let x=trip(),arr=activePayments(x),data={title:$('pyn').value||'회비/수납',date:$('pyd').value,amount:+$('pya').value||0,payer:$('pyp').value,team:$('pyt').value};if(id){let o=arr.find(z=>z.id===id);if(o)Object.assign(o,data)}else{data.id=uid();arr.push(data)}setActivePayments(x,arr);save();closeM();renderSettleBody()}
+function delPayment(id){let x=trip();setActivePayments(x,activePayments(x).filter(z=>z.id!==id));save();renderSettleBody()}
+function settlePeople(){
+  let x=trip();
+  $('settleBody').innerHTML=`
+   <div class="row between"><h3 style="margin:6px 0">🧑‍🤝‍🧑 인원 관리</h3><button onclick="personForm()">＋ 인원 추가</button></div>
+   ${x.people.map(p=>`<div class="card"><div class="row between"><span><b>${esc(p.name)}</b><br><small class="muted">${p.team?esc(teamName(x,p.team)):'팀 미배정'}</small></span><div class="row" style="gap:6px"><button class="gray small" onclick="personForm('${p.id}')">수정</button><button class="red small" onclick="delPerson('${p.id}')">삭제</button></div></div></div>`).join('')||'<div class="card muted">인원을 추가하세요.</div>'}
+   <div class="row between" style="margin-top:14px"><h3 style="margin:6px 0">🏷️ 팀 관리</h3><button class="gray" onclick="teamForm()">＋ 팀 구성</button></div>
+   ${x.teams.map(t=>`<div class="card"><div class="row between"><span><b>${esc(t.name)}</b><br><small class="muted">${x.people.filter(p=>p.team===t.id).length}명</small></span><div class="row" style="gap:6px"><button class="gray small" onclick="teamForm('${t.id}')">수정</button><button class="red small" onclick="delTeam('${t.id}')">삭제</button></div></div></div>`).join('')||'<div class="card muted">팀이 없습니다. (예: A팀/B팀, 부부1/부부2, 가족A 등)</div>'}`;
+}
+function personForm(id){
+  let x=trip(),p=id?x.people.find(z=>z.id===id):null;
+  $('sheet').innerHTML=`<h2>${p?'인원 수정':'인원 추가'}</h2><label>이름</label><input id="pn" value="${p?esc(p.name):''}"><label>소속 팀</label><select id="pf"><option value="">미배정</option>${x.teams.map(t=>`<option value="${t.id}" ${p&&p.team===t.id?'selected':''}>${esc(t.name)}</option>`).join('')}</select><button style="margin-top:12px" onclick="savePerson('${id||''}')">저장</button>${p?`<button class="red" style="margin-top:8px" onclick="delPerson('${id}');closeM()">삭제</button>`:''}`;
+  openM();
+}
+function savePerson(id){
+  let x=trip(),name=$('pn').value||'이름',team=$('pf').value;
+  if(id){let p=x.people.find(z=>z.id===id);p.name=name;p.team=team}else{x.people.push({id:uid(),name,team})}
+  save();closeM();renderSettleBody();
+}
+function removePersonCore(id){
+  let x=trip();x.people=x.people.filter(p=>p.id!==id);
+  activeEvents(x).forEach(e=>{if(e.payer===id)e.payer='';e.splitWith=(e.splitWith||[]).filter(z=>z!==id)});
+  (activeExpenses(x)||[]).forEach(e=>{if(e.payer===id)e.payer='';e.splitWith=(e.splitWith||[]).filter(z=>z!==id)});
+  if(x.golf&&x.golf.courses)x.golf.courses.forEach(c=>{if(c.payer===id)c.payer='';c.splitWith=(c.splitWith||[]).filter(z=>z!==id)});
+  save();
+}
+function delPerson(id){removePersonCore(id);renderSettleBody()}
+function teamForm(id){
+  let x=trip(),t=id?x.teams.find(z=>z.id===id):null;
+  let selected=t?x.people.filter(p=>p.team===id).map(p=>p.id):[];
+  window.tmpTeamMembers=selected;
+  $('sheet').innerHTML=`<h2>${t?'팀 수정':'팀 구성'}</h2>
+    <div class="muted">먼저 개별 인원을 추가한 뒤, 여기서 여러 명을 선택해 한 팀으로 묶을 수 있습니다.</div>
+    <label>팀 이름</label><input id="tfn" value="${t?esc(t.name):''}" placeholder="예: A팀, 부부1">
+    <label>팀에 넣을 인원</label>
+    <div class="chiplist" id="teamMemberChips">${x.people.map(p=>`<span class="chip ${selected.includes(p.id)?'on':''}" onclick="toggleTeamMember('${p.id}')">${esc(p.name)}</span>`).join('')||'<span class="muted">인원을 먼저 추가하세요.</span>'}</div>
+    <div class="muted" style="margin-top:6px">선택한 인원은 이 팀으로 배정됩니다. 다른 팀에 속한 사람을 선택하면 기존 팀에서는 자동으로 빠집니다.</div>
+    <button style="margin-top:12px" onclick="saveTeam('${id||''}')">팀 저장</button>
+    ${t?`<button class="red" style="margin-top:8px" onclick="delTeam('${id}');closeM()">팀 삭제</button>`:''}`;
+  openM();
+}
+function toggleTeamMember(id){let i=window.tmpTeamMembers.indexOf(id);if(i>-1)window.tmpTeamMembers.splice(i,1);else window.tmpTeamMembers.push(id);renderTeamMemberChips()}
+function renderTeamMemberChips(){let x=trip();$('teamMemberChips').innerHTML=x.people.map(p=>`<span class="chip ${window.tmpTeamMembers.includes(p.id)?'on':''}" onclick="toggleTeamMember('${p.id}')">${esc(p.name)}</span>`).join('')||'<span class="muted">인원을 먼저 추가하세요.</span>'}
+function saveTeam(id){
+  let x=trip(),name=$('tfn').value||'팀';
+  let teamId=id||uid();
+  if(id){x.teams.find(z=>z.id===id).name=name}else{x.teams.push({id:teamId,name})}
+  x.people.forEach(p=>{if(window.tmpTeamMembers.includes(p.id))p.team=teamId;else if(id&&p.team===id)p.team=''});
+  save();closeM();renderSettleBody();
+}
+function delTeam(id){
+  let x=trip();x.teams=x.teams.filter(t=>t.id!==id);
+  x.people.forEach(p=>{if(p.team===id)p.team=''});
+  activeEvents(x).forEach(e=>{if(e.splitTeam===id)e.splitTeam=''});
+  (activeExpenses(x)||[]).forEach(e=>{if(e.splitTeam===id)e.splitTeam=''});
+  if(x.golf&&x.golf.courses)x.golf.courses.forEach(c=>{if(c.splitTeam===id)c.splitTeam=''});
+  save();renderSettleBody();
+}
+
+/* ---------- 정산 리포트(PDF/공유) ---------- */
+function renderReportHTML(x,opts){
+  opts=opts||{};let scope=opts.scope||'both',includePhotos=!!opts.includePhotos;
+  let items=collectCosts(x);
+  let total=items.reduce((s,i)=>s+i.cost,0);
+  let byDate={};items.forEach(i=>{let d=i.date||'날짜미정';(byDate[d]=byDate[d]||[]).push(i)});
+  let dateKeys=Object.keys(byDate).sort();
+  let byCat={};items.forEach(i=>{let c=i.category||'기타';(byCat[c]=byCat[c]||[]).push(i)});
+  let {net}=computeBalances(x);
+  let debts=simplifyDebts(net);
+  let teamIds=[...x.teams.map(t=>t.id),''];
+  let teamNet={};teamIds.forEach(t=>teamNet[t]=0);
+  x.people.forEach(p=>{teamNet[p.team||'']=(teamNet[p.team||'']||0)+net[p.id]});
+  let usedTeams=teamIds.filter(t=>x.people.some(p=>(p.team||'')===t));
+  let teamDebts=simplifyDebts(teamNet);
+  let now=new Date(),genDate=localDateStr(now);
+  let photos=[];
+  if(includePhotos){activeEvents(x).forEach(e=>(e.photos||[]).forEach(p=>photos.push({p,label:e.title,date:e.date})))}
+  return `<h2 style="margin:0 0 2px">${esc(x.title)} 정산 리포트</h2>
+     <div class="muted">${x.start||''} ~ ${x.end||''} · 생성일 ${genDate}${scope!=='both'?` · ${scope==='team'?'팀별':'개인별'} 정산본`:''}</div>
+     <div class="big" style="margin:10px 0">총 지출 ${won(total)}</div>
+     ${reconcilePanel(x)}
+     <h3>📅 일자별 정리</h3>
+     ${dateKeys.length?dateKeys.map(d=>{let arr=byDate[d],sub=arr.reduce((s,i)=>s+i.cost,0);return `<div style="margin-bottom:10px"><div class="row between"><b>${esc(d)}</b><b>${won(sub)}</b></div>${arr.map(i=>`<div class="row between" style="padding:4px 0;border-bottom:1px solid #eee"><span>${esc(i.label)} <small class="muted">(${esc(i.category||'기타')}·${esc(nameById(x,i.payer))})</small></span><span>${won(i.cost)}</span></div>`).join('')}</div>`}).join(''):'<div class="muted">지출 내역이 없습니다.</div>'}
+     <h3>🏷️ 항목별 정리</h3>
+     ${Object.keys(byCat).length?Object.keys(byCat).map(c=>{let arr=byCat[c],sub=arr.reduce((s,i)=>s+i.cost,0);return `<div style="margin-bottom:10px"><div class="row between"><b>${esc(c)}</b><b>${won(sub)}</b></div>${arr.map(i=>`<div class="row between" style="padding:4px 0;border-bottom:1px solid #eee"><span>${esc(i.label)} <small class="muted">(${esc(i.date||'')})</small></span><span>${won(i.cost)}</span></div>`).join('')}</div>`}).join(''):'<div class="muted">지출 내역이 없습니다.</div>'}
+     <h3>💵 회비/수납</h3>${(activePayments(x)||[]).length?(activePayments(x)||[]).map(r=>`<div class="row between" style="padding:4px 0;border-bottom:1px solid #eee"><span>${esc(r.title)} <small class="muted">(${esc(nameById(x,r.payer))})</small></span><span>${won(r.amount)}</span></div>`).join(''):'<div class="muted">회비/수납 없음</div>'}
+     ${scope==='individual'||scope==='both'?`<h3>👤 개인별 정산</h3>
+     ${x.people.map(p=>`<div class="row between" style="padding:4px 0;border-bottom:1px solid #eee"><span>${esc(p.name)}</span><span>${net[p.id]>=0?'+':''}${won(net[p.id])}</span></div>`).join('')||'<div class="muted">인원 없음</div>'}
+     <div style="margin-top:6px">${debts.length?debts.map(d=>`<div class="row between" style="padding:4px 0"><span>${esc(nameById(x,d.from))} → ${esc(nameById(x,d.to))}</span><span>${won(d.amt)}</span></div>`).join(''):'<div class="muted">정산할 금액 없음</div>'}</div>`:''}
+     ${(scope==='team'||scope==='both')&&usedTeams.length?`<h3>👥 팀별 정산</h3>${usedTeams.map(t=>`<div class="row between" style="padding:4px 0;border-bottom:1px solid #eee"><span>${t===''?'미배정':esc(teamName(x,t))}</span><span>${teamNet[t]>=0?'+':''}${won(teamNet[t])}</span></div>`).join('')}<div style="margin-top:6px">${teamDebts.length?teamDebts.map(d=>`<div class="row between" style="padding:4px 0"><span>${(d.from===''?'미배정':esc(teamName(x,d.from)))} → ${(d.to===''?'미배정':esc(teamName(x,d.to)))}</span><span>${won(d.amt)}</span></div>`).join(''):'<div class="muted">정산할 금액 없음</div>'}</div>`:''}
+     ${includePhotos?`<h3>📷 사진 / 주요 기록</h3>${photos.length?`<div class="row" style="gap:8px;flex-wrap:wrap">${photos.map(ph=>`<div style="text-align:center"><img src="${ph.p}" style="width:90px;height:90px;object-fit:cover;border-radius:10px"><div class="muted" style="font-size:10px;max-width:90px">${esc(ph.label)}</div></div>`).join('')}</div>`:'<div class="muted">첨부된 사진이 없습니다.</div>'}`:''}`;
+}
+function settleReport(){
+  let x=trip();
+  let total=collectCosts(x).reduce((s,i)=>s+i.cost,0);
+  let itemCount=collectCosts(x).length;
+  $('settleBody').innerHTML=`
+   ${reconcilePanel(x)}
+   <div class="card"><h3 style="margin:0 0 6px">📄 정산 리포트</h3><div class="muted">일자별·항목별 지출 정리와 개인별·팀별 정산 결과를 한 번에 확인할 수 있습니다. 공유 전에 내용을 미리 검토하고 전달 메시지를 수정할 수 있습니다.</div>
+    <div class="statgrid" style="margin-top:10px"><div class="stat"><span class="muted">총 지출</span><b>${won(total)}</b></div><div class="stat"><span class="muted">지출 항목</span><b>${itemCount}건</b></div></div>
+    <button style="margin-top:12px;width:100%" onclick="reportPreview()">📋 리포트 미리보기 → 공유</button>
+   </div>`;
+}
+function reportPreview(){
+  let x=trip();
+  window.reportTitleOverride=null;
+  if(!window.reportShareMsg)window.reportShareMsg=`[${x.title||'여행'}] 정산 리포트를 보내드립니다. 확인 부탁드립니다.`;
+  window.reportScope='both';window.reportIncludePhotos=false;
+  $('sheet').innerHTML=`<h2>📤 정산 리포트 공유 미리보기</h2>
+   <div class="muted" style="margin-bottom:8px">아래 내용을 확인한 뒤 전달 메시지를 원하는 대로 수정하고 공유하세요. 금액이 다르면 먼저 비용/인원을 수정한 후 다시 열어보세요.</div>
+   <label>정산 범위</label><select id="reportScopeSel" onchange="onReportOptsChange()">
+     <option value="both">전체 (개인별+팀별)</option>
+     <option value="individual">개인별 정산만</option>
+     <option value="team">팀별 정산만</option>
+   </select>
+   <label class="row" style="gap:8px;margin-top:8px;cursor:pointer"><input type="checkbox" id="reportPhotoChk" style="width:auto" onchange="onReportOptsChange()"><span>📷 사진 / 주요 기록 포함</span></label>
+   <label style="margin-top:10px">전달 메시지</label><textarea id="reportMsg" rows="3">${esc(window.reportShareMsg)}</textarea>
+   <div id="reportPrint" class="card" style="max-height:44vh;overflow:auto;margin-top:10px;background:#fbfcfe">${renderReportHTML(x,{scope:'both',includePhotos:false})}</div>
+   <div id="pdfPreviewBox" style="display:none"></div>
+   <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
+     <button class="gray" onclick="closeM();setSettleTab('expense')">✏️ 비용 수정</button>
+     <button class="gray" onclick="closeM();setSettleTab('people')">🧑‍🤝‍🧑 인원/팀 확인</button>
+   </div>
+   <div class="row" style="gap:8px;margin-top:8px;flex-wrap:wrap">
+     <button class="gray" onclick="previewGeneratedPdf()">🔍 전체 페이지 미리보기</button>
+     <button class="gray" onclick="downloadReportPdf()">📄 PDF 다운로드</button>
+     <button onclick="shareReportPdf()">📤 카톡/문자로 발송</button>
+   </div>`;
+  openM();
+}
+function onReportOptsChange(){
+  let x=trip();
+  window.reportScope=$('reportScopeSel')?$('reportScopeSel').value:'both';
+  window.reportIncludePhotos=$('reportPhotoChk')?$('reportPhotoChk').checked:false;
+  let box=$('reportPrint');if(box)box.innerHTML=renderReportHTML(x,{scope:window.reportScope,includePhotos:window.reportIncludePhotos});
+}
+async function previewGeneratedPdf(){
+  let btn=event&&event.target;let prevLabel=btn?btn.textContent:'';if(btn){btn.textContent='⏳ 생성 중...';btn.disabled=true}
+  try{
+    let doc=await buildReportPdf();
+    if(!doc)return;
+    if(window.currentPdfPreviewUrl){URL.revokeObjectURL(window.currentPdfPreviewUrl)}
+    let blob=doc.output('blob');
+    let url=URL.createObjectURL(blob);
+    window.currentPdfPreviewUrl=url;
+    let box=$('pdfPreviewBox');
+    if(box){box.style.display='block';box.innerHTML=`<div class="muted" style="margin:8px 0 4px">총 ${doc.internal.getNumberOfPages()}페이지 · 스크롤/확대해서 전체 내용을 확인하세요.</div><iframe src="${url}" style="width:100%;height:60vh;border:1px solid var(--line);border-radius:10px"></iframe>`}
+  } finally {
+    if(btn){btn.textContent=prevLabel;btn.disabled=false}
+  }
+}
+async function buildReportPdf(){
+  let el=$('reportPrint');
+  if(!el)return null;
+  if(typeof html2canvas==='undefined'||!window.jspdf){alert('PDF 생성 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인해주세요.');return null}
+  const prevStyle={maxHeight:el.style.maxHeight,overflow:el.style.overflow,height:el.style.height};
+  el.style.maxHeight='none';el.style.overflow='visible';el.style.height='auto';
+  let canvas;
+  try{
+    canvas=await html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true,windowWidth:el.scrollWidth,height:el.scrollHeight,windowHeight:el.scrollHeight});
+  }finally{
+    el.style.maxHeight=prevStyle.maxHeight;el.style.overflow=prevStyle.overflow;el.style.height=prevStyle.height;
+  }
+  let {jsPDF}=window.jspdf;
+  let doc=new jsPDF('p','mm','a4');
+  let pageWidth=doc.internal.pageSize.getWidth(),pageHeight=doc.internal.pageSize.getHeight();
+  let imgWidth=pageWidth,imgHeight=canvas.height*imgWidth/canvas.width;
+  let heightLeft=imgHeight,position=0;
+  let imgData=canvas.toDataURL('image/png');
+  doc.addImage(imgData,'PNG',0,position,imgWidth,imgHeight);
+  heightLeft-=pageHeight;
+  while(heightLeft>0){
+    position=heightLeft-imgHeight;
+    doc.addPage();
+    doc.addImage(imgData,'PNG',0,position,imgWidth,imgHeight);
+    heightLeft-=pageHeight;
+  }
+  return doc;
+}
+async function downloadReportPdf(){
+  let doc=await buildReportPdf();if(!doc)return;
+  doc.save(`${window.reportTitleOverride||trip().title||'여행'}_정산리포트.pdf`);
+}
+async function shareReportPdf(){
+  let doc=await buildReportPdf();if(!doc)return;
+  let msgEl=$('reportMsg');let msg=msgEl?msgEl.value:(window.reportShareMsg||((window.reportTitleOverride||trip().title||'여행')+' 정산 리포트입니다.'));
+  window.reportShareMsg=msg;
+  let blob=doc.output('blob');
+  let file=new File([blob],`${window.reportTitleOverride||trip().title||'여행'}_정산리포트.pdf`,{type:'application/pdf'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:'정산 리포트',text:msg});}catch(e){}
+  } else {
+    doc.save(`${trip().title||'여행'}_정산리포트.pdf`);
+    alert('이 브라우저에서는 파일 공유가 지원되지 않아 PDF가 다운로드되었습니다. 아래 메시지와 함께 카카오톡/문자로 직접 전송해주세요:\n\n'+msg);
+  }
+}
+
+/* ---------- 지정 사용자 공유 ---------- */
+function shareTripPackage(){
+  let x=trip();
+  $('sheet').innerHTML=`<h2>🔐 지정 사용자 공유</h2>
+    <div class="muted">현재 여행의 일정·참석자·장소·비용·정산 정보를 수신자 전용 파일로 만들어 카카오톡/문자 공유 메뉴에서 보낼 수 있습니다.</div>
+    <label>수신자 이름</label><input id="shrName" placeholder="예: 홍길동">
+    <label>4자리 숫자 비밀번호</label><input id="shrPw" inputmode="numeric" maxlength="4" type="password" placeholder="0000">
+    <label>공유 범위</label><select id="shrScope"><option value="all">전체 여행 기록</option><option value="plan">일정·장소·참석자 중심</option><option value="settle">일정·비용·정산 포함</option></select>
+    <div class="warn" style="margin-top:10px">안내: 이 기능은 오프라인 HTML 파일에 4자리 접근 비밀번호를 적용합니다. 비밀번호를 아는 수신자가 파일 자체를 다시 전달하는 것까지 기술적으로 차단하려면 서버 인증/사용자별 계정이 필요합니다.</div>
+    <button style="margin-top:12px" onclick="makeSharePackage()">📲 카카오톡/공유 메뉴로 보내기</button>`;
+  openM();
+}
+async function makeSharePackage(){
+  let x=trip(),recipient=($('shrName').value||'지정 사용자').trim(),pw=($('shrPw').value||'').trim(),scope=$('shrScope').value;
+  if(!/^\d{4}$/.test(pw)){alert('4자리 숫자 비밀번호를 입력하세요.');return}
+  let snapshot=JSON.parse(JSON.stringify(x));
+  if(scope==='plan'){snapshot.tour=snapshot.tour||{};snapshot.golfData=snapshot.golfData||{};let sc=snapshot.mode==='golf'?snapshot.golfData:snapshot.tour;sc.expenses=[];sc.payments=[]}
+  const raw=JSON.stringify({recipient,title:snapshot.title||'여행',createdAt:new Date().toISOString(),snapshot,scope});
+  const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const keyMaterial=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},keyMaterial,{name:'AES-GCM',length:256},false,['encrypt']);
+  const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(raw));
+  const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a)));const payload=`${b64(salt)}.${b64(iv)}.${b64(cipher)}`;
+  const html=`<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(snapshot.title||'여행')} - 나의 여행 수첩</title><style>body{margin:0;background:#f4f7fb;color:#172033;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans KR',sans-serif;padding:18px}.box{max-width:720px;margin:20px auto;background:#fff;border-radius:20px;padding:20px;box-shadow:0 4px 20px #0001}input,button{font:inherit;padding:12px;border-radius:10px;border:1px solid #d8e0ea}button{background:#1769e0;color:#fff;border:0;font-weight:800;width:100%;margin-top:10px}.muted{color:#687385;font-size:13px}.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #eee}.big{font-size:25px;font-weight:800}.chip{display:inline-block;background:#eef2f8;border-radius:99px;padding:6px 10px;margin:3px;font-size:12px}.warn{background:#fff8e6;padding:10px;border-radius:10px;color:#7a5a00;font-size:12px}</style><div class="box" id="gate"><h2>🔐 나의 여행 수첩 지정 사용자</h2><div class="muted">수신자: ${esc(recipient)}</div><label>4자리 숫자 비밀번호</label><input id="pw" inputmode="numeric" maxlength="4" type="password" placeholder="비밀번호"><button onclick="unlock()">열기</button><div class="warn" style="margin-top:12px">파일 내용은 비밀번호로 암호화되어 있습니다.</div></div><div class="box" id="app" style="display:none"></div><script>
+const DATA='${payload}';const enc=new TextEncoder(),dec=new TextDecoder();function ub64(s){const b=atob(s),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function won(n){return Number(Math.round(n||0)).toLocaleString()+'원'}async function unlock(){let pw=document.getElementById('pw').value||'';if(!/^\\d{4}$/.test(pw)){alert('4자리 숫자를 입력하세요.');return}try{let [sa,iv,ct]=DATA.split('.'),km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']),key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:ub64(sa),iterations:100000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']),plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:ub64(iv)},key,ub64(ct)),d=JSON.parse(dec.decode(plain)),x=d.snapshot,scope=x.mode==='golf'?(x.golfData||{}):(x.tour||{}),events=scope.events||[],expenses=scope.expenses||[],cost=events.reduce((s,e)=>s+(+e.cost||0),0)+expenses.reduce((s,e)=>s+(+e.amount||0),0)+(x.golf&&x.golf.courses||[]).reduce((s,c)=>s+(+c.green||0)+(+c.caddy||0)+(+c.cart||0),0);document.getElementById('app').innerHTML='<h2>'+esc(x.title||'여행')+'</h2><div class="muted">'+esc(x.start||'')+' ~ '+esc(x.end||'')+' · '+(x.mode==='golf'?'⛳ 골프 여행':'✈️ 일반 관광')+'</div><h3>👥 참석자</h3><div>'+(x.people||[]).map(p=>'<span class="chip">'+esc(p.name)+'</span>').join('')+'</div><h3>📅 일정</h3>'+(events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(e=>'<div class="row"><span><b>'+esc(e.date||'')+' '+esc(e.time||'')+'</b> · '+esc(e.title||'')+'<br><span class="muted">📍 '+esc(e.place||'')+'</span></span><b>'+((+e.cost||0)?won(e.cost):'')+'</b></div>').join('')||'<div class="muted">일정 없음</div>')+'<h3>💰 총 소요 비용</h3><div class="big">'+won(cost)+'</div><h3>📝 주요 내용</h3><div style="white-space:pre-wrap">'+esc(x.notes||'')+'</div><div class="warn" style="margin-top:14px">지정 사용자용 암호화 기록입니다.</div>';document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block'}catch(e){alert('비밀번호가 올바르지 않거나 파일이 손상되었습니다.')}}document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock()})<\/script></html>`;
+  let file=new File([html],`${(snapshot.title||'여행').replace(/[\\/:*?"<>|]/g,'_')}_지정사용자용.html`,{type:'text/html'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:`${snapshot.title||'여행'} 지정 사용자용`,text:`${recipient}님에게 보내는 나의 여행 수첩 여행 기록입니다.`});closeM()}catch(e){}}else{let a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);alert('파일 공유가 지원되지 않아 HTML 파일로 저장했습니다. 카카오톡에서 첨부해 보내세요.')}
+}
+
+/* ---------- 준비 체크리스트 ---------- */
+function check(){
+  let x=trip();
+  if(!x.checks||!x.checks.length){
+    x.checks=(mode==='golf'?['골프채','골프화','장갑','골프공','거리측정기','모자','여권','항공권','호텔 예약','골프장 예약']:['여권','항공권','호텔 예약','여행자보험','충전기','상비약','현지 유심/이심','우산']).map(t=>({id:uid(),text:t,checked:false}));
+    save();
+  }
+  $('app').innerHTML=`<div class="row between"><h3 style="margin:6px 0">☑️ ${mode==='golf'?'골프':'여행'} 준비 체크리스트</h3><button class="gray small" onclick="checkItemForm()">＋ 항목 추가</button></div>
+  <div class="card">${x.checks.map(c=>`<div class="check"><input type="checkbox" ${c.checked?'checked':''} onchange="toggleCheck('${c.id}')"><span style="flex:1">${esc(c.text)}</span><button class="red small" onclick="delCheck('${c.id}')">삭제</button></div>`).join('')}</div>`;
+}
+function checkItemForm(){$('sheet').innerHTML=`<h2>체크리스트 항목 추가</h2><label>항목</label><input id="cin" placeholder="예: 여권 유효기간 확인"><button style="margin-top:12px" onclick="addCheckItem()">추가</button>`;openM()}
+function addCheckItem(){let x=trip();x.checks.push({id:uid(),text:$('cin').value||'항목',checked:false});save();closeM();render()}
+function toggleCheck(id){let c=trip().checks.find(z=>z.id===id);c.checked=!c.checked;save()}
+function delCheck(id){let x=trip();x.checks=x.checks.filter(c=>c.id!==id);save();render()}
+
+/* ---------- 골프장 관리 ---------- */
+function course(){
+  let x=trip();
+  $('app').innerHTML=`<div class="row between"><h3 style="margin:6px 0">🏌️ 골프장 관리</h3><button class="green" onclick="courseForm()">＋ 골프장 추가</button></div>
+  ${x.golf.courses.map((c,i)=>`<div class="card"><div class="row between"><span class="badge">ROUND ${i+1}</span>${bookingBadge(c)}</div><h3>${esc(c.name)}</h3><div class="muted">📅 ${esc(c.date)} · ⏰ ${esc(c.tee)} · 👥 ${c.players}명</div><div>캐디 ${won(c.caddy)} · 카트 ${won(c.cart)} · 그린피 ${won(c.green)}</div>${(+c.green||0)+(+c.caddy||0)+(+c.cart||0)>0?`<div class="muted">결제자: ${esc(nameById(x,c.payer))} · 분담: ${esc(splitLabel(x,c))}</div>`:''}<div class="row" style="margin-top:8px;justify-content:flex-end;gap:6px;flex-wrap:wrap">${c.bookingStatus&&c.bookingStatus!=='none'?`<button class="gray small" onclick="bookingHelper('course','${c.id}')">🎫 예약도우미</button>`:''}<button class="gray small" onclick="courseForm('${c.id}')">수정</button><button class="red small" onclick="delCourse('${c.id}')">삭제</button></div></div>`).join('')||'<div class="card muted">골프장을 추가하세요.</div>'}`;
+}
+function courseForm(id){
+  let x=trip(),c=id?x.golf.courses.find(z=>z.id===id):null;
+  window.tmpSplit=c&&c.splitScope==='custom'?[...(c.splitWith||[])]:[];window.tmpSplitTeam=c&&c.splitScope==='team'?(c.splitTeam||''):'';
+  $('sheet').innerHTML=`<h2>${c?'골프장 수정':'골프장 추가'}</h2>
+  <label>골프장</label><input id="gn" value="${c?esc(c.name):''}">
+  <div class="grid"><div><label>라운드 날짜</label><input id="gd" type="date" value="${c?c.date:''}"></div><div><label>티오프</label><input id="gt" type="time" value="${c?c.tee:''}"></div></div>
+  <div class="grid"><div><label>그린피</label><input id="gg" type="number" value="${c?c.green:0}"></div><div><label>캐디피</label><input id="gc" type="number" value="${c?c.caddy:0}"></div></div>
+  <label>카트비</label><input id="gk" type="number" value="${c?c.cart:0}">
+  <label>인원</label><input id="gp" type="number" value="${c?c.players:4}">
+  <label>결제자</label><select id="gpay"><option value="">미지정</option>${x.people.map(p=>`<option value="${p.id}" ${c&&c.payer===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select>
+  <label>비용 분담 대상</label><select id="gsplit" onchange="renderCourseSplitArea()">
+    <option value="all" ${(!c||c.splitScope==='all')?'selected':''}>전체 인원 균등</option>
+    <option value="custom" ${c&&c.splitScope==='custom'?'selected':''}>특정 인원 지정</option>
+    <option value="team" ${c&&c.splitScope==='team'?'selected':''}>특정 팀 전체</option>
+  </select>
+  <div id="gSplitArea"></div>
+  <div class="card" style="margin:10px 0;padding:12px;background:#f4fbf8"><b>✨ 라운드 주변 추천</b><div class="muted">라운드 전후 맛집·관광지·카페 등을 함께 기록할 수 있습니다.</div><label>추천 유형</label><select id="grcat"><option>맛집</option><option>관광지</option><option>카페</option><option>쇼핑</option><option>마사지</option><option>기타</option></select><label>추천 장소</label><input id="grplace" value="${c?esc(c.recommendPlace||''):''}" placeholder="예: 골프장 인근 맛집"><label>추천 내용 / 메모</label><textarea id="grrec" placeholder="라운드 전후 추천 장소, 예약 정보 등">${c?esc(c.recommendation||''):''}</textarea><button class="gray small" type="button" onclick="recommendForCourseForm()">✨ 주변추천 찾기</button><div id="courseRecResult" class="muted" style="margin-top:6px"></div></div>
+  <label>예약 여부</label><select id="gbs">
+    <option value="none" ${c&&c.bookingStatus==='none'?'selected':''}>해당없음</option>
+    <option value="needed" ${(!c||c.bookingStatus==='needed')?'selected':''}>예약 필요 (미완료)</option>
+    <option value="booked" ${c&&c.bookingStatus==='booked'?'selected':''}>예약 완료</option>
+  </select>
+  <button class="green" style="margin-top:12px" onclick="saveCourse('${id||''}')">저장</button>
+  ${c?`<button class="red" style="margin-top:8px" onclick="delCourse('${id}');closeM()">삭제</button>`:''}`;
+  openM();renderCourseSplitArea();
+}
+function renderCourseSplitArea(){
+  let x=trip(),s=$('gsplit').value;
+  if(s==='custom'){$('gSplitArea').innerHTML=`<label>분담 대상 선택</label><div class="chiplist">${x.people.map(p=>`<span class="chip ${window.tmpSplit.includes(p.id)?'on':''}" onclick="toggleCourseSplit('${p.id}')">${esc(p.name)}</span>`).join('')||'<span class="muted">인원을 먼저 추가하세요.</span>'}</div>`}
+  else if(s==='team'){$('gSplitArea').innerHTML=`<label>대상 팀 선택</label><div class="chiplist">${x.teams.map(t=>`<span class="chip ${window.tmpSplitTeam===t.id?'on':''}" onclick="toggleCourseTeamSplit('${t.id}')">👥 ${esc(t.name)}</span>`).join('')||'<span class="muted">팀을 먼저 구성하세요.</span>'}</div><div class="muted">선택한 팀 전체가 하나의 정산 단위로 계산됩니다.</div>`}
+  else $('gSplitArea').innerHTML='';
+}
+function toggleCourseSplit(id){let i=window.tmpSplit.indexOf(id);if(i>-1)window.tmpSplit.splice(i,1);else window.tmpSplit.push(id);renderCourseSplitArea()}
+function toggleCourseTeamSplit(id){window.tmpSplitTeam=window.tmpSplitTeam===id?'':id;renderCourseSplitArea()}
+function saveCourse(id){
+  let x=trip(),s=$('gsplit').value;
+  let data={name:$('gn').value||'골프장',date:$('gd').value,tee:$('gt').value,green:+$('gg').value||0,caddy:+$('gc').value||0,cart:+$('gk').value||0,players:+$('gp').value||4,payer:$('gpay').value,splitScope:s,splitWith:s==='custom'?[...window.tmpSplit]:[],splitTeam:s==='team'?window.tmpSplitTeam:'',bookingStatus:$('gbs').value,bookingCategory:'golf',recommendType:$('grcat')?$('grcat').value:'',recommendPlace:$('grplace')?$('grplace').value:'',recommendation:$('grrec')?$('grrec').value:''};
+  if(id){Object.assign(x.golf.courses.find(z=>z.id===id),data)}else{data.id=uid();x.golf.courses.push(data)}
+  save();closeM();render();
+}
+function delCourse(id){let x=trip();x.golf.courses=x.golf.courses.filter(c=>c.id!==id);x.golf.scores=x.golf.scores.filter(s=>s.course!==id);save();render()}
+
+function recommendForCourseForm(){
+  let base=$('gn')?.value||'골프장', type=$('grcat')?.value||'맛집';
+  let p=$('grplace'); if(p&&!p.value)p.value=base+' 주변';
+  recommend(base,type);
+}
+
+/* ---------- 스코어 ---------- */
+function score(){
+  let x=trip();
+  $('app').innerHTML=`<div class="card"><h3>📝 라운드 스코어</h3><select id="cr" onchange="renderScore()">${x.golf.courses.map((c,i)=>`<option value="${c.id}">${i+1}. ${esc(c.name)} ${c.date}</option>`).join('')}</select><div id="scoreArea"></div></div>`;
+  renderScore();
+}
+function renderScore(){
+  let x=trip(),cid=$('cr')?$('cr').value:(x.golf.courses[0]&&x.golf.courses[0].id);
+  let c=x.golf.courses.find(z=>z.id===cid);
+  if(!c){$('scoreArea').innerHTML='골프장을 먼저 추가하세요.';return}
+  let s=x.golf.scores.find(z=>z.course===cid);
+  if(!s){s={course:cid,holes:Array(18).fill(0)};x.golf.scores.push(s);save()}
+  $('scoreArea').innerHTML=`<div class="grid" style="margin-top:10px">${s.holes.map((v,h)=>`<div class="hole"><b>${h+1}H</b><span class="muted">Par ${[4,4,3,5,4,4,3,5,4,4,4,3,5,4,4,3,5,4][h]}</span><input class="score" type="number" min="0" value="${v||''}" onchange="setScore('${cid}',${h},this.value)"></div>`).join('')}</div><h3>총타수: ${s.holes.reduce((a,b)=>a+(+b||0),0)||0}</h3>`;
+}
+function setScore(cid,h,v){let s=trip().golf.scores.find(z=>z.course===cid);s.holes[h]=+v||0;save();renderScore()}
+
+/* ---------- 여행 완료 / 히스토리 ---------- */
+function completeTripForm(){
+  let x=trip();
+  $('sheet').innerHTML=`<h2>🕘 여행 완료 저장</h2><div class="muted">현재 여행의 일정, 장소, 참석자, 소요 비용, 예약/골프 정보와 아래 주요 내용을 히스토리에 저장합니다.</div>
+  <label>여행 주요 내용 / 메모</label><textarea id="hnotes" rows="6" placeholder="예: 날씨, 만족했던 식당, 골프장 후기, 다음 여행 때 참고할 내용 등">${esc(x.notes||'')}</textarea>
+  <button class="green" style="margin-top:12px" onclick="completeTripSave()">히스토리에 저장</button><button class="gray" style="margin-top:8px" onclick="closeM()">취소</button>`;
+  openM();
+}
+function completeTripSave(){
+  let x=trip(),completedMode=mode;x.notes=$('hnotes').value||'';let {net}=computeBalances(x),total=collectCosts(x).reduce((s,i)=>s+i.cost,0),snapshot=JSON.parse(JSON.stringify(x));snapshot.completedAt=new Date().toISOString();snapshot.finalTotal=total;snapshot.finalNet=net;snapshot.completedMode=completedMode;db.history=db.history||[];db.history.unshift({id:uid(),tripId:x.id,title:x.title,start:x.start,end:x.end,mode:completedMode,completedAt:snapshot.completedAt,notes:x.notes||'',snapshot});
+  x.people.forEach(p=>addFavoritePerson(p.name));
+  x.title=completedMode==='golf'?'새 골프 여행':'새 일반 관광';x.start='';x.end='';x.people=[];x.teams=[];x.checks=[];x.notes='';x.tour={events:[],expenses:[],payments:[]};x.golfData={events:[],expenses:[],payments:[]};if(completedMode==='golf')x.golf={courses:[],scores:[]};x.mode=completedMode;x._completedResetAt=new Date().toISOString();save();closeM();view='history';historySelected=db.history[0].id;render();
+}
+function history(){
+  let hs=db.history||[];
+  if(historySelected){let h=hs.find(z=>z.id===historySelected);if(h){renderHistoryDetail(h);return}historySelected=null}
+  $('app').innerHTML=`<div class="card"><div class="row between"><div><h2 style="margin:0">🕘 여행 히스토리</h2><div class="muted">완료한 여행을 날짜·참석자·비용·주요 내용과 함께 보관합니다.</div></div></div></div>${hs.map(h=>`<div class="card"><div class="row between"><div><b>${esc(h.title)}</b><div class="muted">${esc(h.start||'')} ~ ${esc(h.end||'')} · ${h.mode==='golf'?'⛳ 골프':'✈️ 관광'} · 완료 ${esc((h.completedAt||'').slice(0,10))}</div><div class="muted">총 비용 ${won(h.snapshot?.finalTotal||0)} · 참석자 ${(h.snapshot?.people||[]).length}명</div></div><button class="small" onclick="historySelected='${h.id}';render()">상세보기</button></div></div>`).join('')||'<div class="card muted">아직 완료된 여행이 없습니다. 현재 여행에서 ‘여행 완료’를 누르면 여기에 저장됩니다.</div>'}`;
+}
+function renderHistoryDetail(h){
+  let x=h.snapshot||{},oldMode=mode;mode=h.mode||x.mode||'tour';let items=collectCosts(x),total=items.reduce((s,i)=>s+i.cost,0),people=x.people||[],scope=mode==='golf'?(x.golfData||{}):(x.tour||{}),events=[...(scope.events||[])],payments=(scope.payments||[]);mode=oldMode;
+  $('app').innerHTML=`<div class="row" style="margin-bottom:10px"><button class="gray" onclick="historySelected=null;render()">← 목록</button><h2 style="margin:0">${esc(h.title)}</h2></div>
+  <div class="card"><div class="muted">여행 기간</div><b>${esc(h.start||'')} ~ ${esc(h.end||'')}</b><div class="muted" style="margin-top:7px">완료일 ${esc((h.completedAt||'').slice(0,10))} · ${h.mode==='golf'?'골프 여행':'일반 관광'}</div></div>
+  <div class="card"><h3>👥 참석자 (${people.length}명)</h3><div class="chiplist">${people.map(p=>`<span class="chip">${esc(p.name)}${p.team?` · ${esc(teamName(x,p.team))}`:''}</span>`).join('')||'<span class="muted">없음</span>'}</div></div>
+  <div class="card"><h3>📅 일정 / 장소</h3>${events.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(e=>`<div class="settlerow" style="align-items:flex-start"><span style="flex:1"><b>${esc(e.date||'')} ${esc(e.time||'')}</b> · ${esc(e.title)}<br><small class="muted">📍 ${esc(e.place||'')}</small>${e.detail?`<div class="muted" style="margin-top:3px">📝 ${esc(e.detail)}</div>`:''}${(e.photos&&e.photos.length)?`<div class="row" style="gap:6px;margin-top:6px;flex-wrap:wrap">${e.photos.map((p,pi)=>`<img src="${p}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;cursor:pointer" onclick="historyPhotoViewer('${h.id}','${e.id}',${pi})">`).join('')}</div>`:''}</span>${e.cost?`<b>${won(e.cost)}</b>`:''}</div>`).join('')||'<div class="muted">기록된 일정이 없습니다.</div>'}</div>
+  <div class="card"><h3>💰 소요 비용</h3><div class="big">${won(total)}</div>${items.map(i=>`<div class="settlerow"><span>${esc(i.label)}<br><small class="muted">${esc(i.date||'')} · ${esc(i.category||'기타')}${i.receiptImage?' · 🧾 증빙':''}</small></span><b>${won(i.cost)}</b></div>`).join('')||'<div class="muted">비용 내역이 없습니다.</div>'}</div>
+  <div class="card"><h3>💵 회비 / 수납</h3>${payments.map(r=>`<div class="settlerow"><span>${esc(r.title)}<br><small class="muted">${esc(r.date||'')} · ${esc(nameById(x,r.payer))}</small></span><b>${won(r.amount)}</b></div>`).join('')||'<div class="muted">회비/수납 기록이 없습니다.</div>'}</div>
+  <div class="card"><h3>📊 최종 정산 현황</h3>${(()=>{let oldMode2=mode;mode=h.mode||x.mode||'tour';let bal=computeBalances(x),debts=simplifyDebts(bal.net);mode=oldMode2;return `<div class="statgrid"><div class="stat"><span class="muted">총 지출</span><b>${won(total)}</b></div><div class="stat"><span class="muted">회비/수납</span><b>${won(payments.reduce((s,r)=>s+(+r.amount||0),0))}</b></div></div>${debts.length?debts.map(d=>`<div class="settlerow"><span>${esc(nameById(x,d.from))} → ${esc(nameById(x,d.to))}</span><b>${won(d.amt)}</b></div>`).join(''):'<div class="muted" style="margin-top:8px">최종 송금할 금액이 없습니다.</div>'}<button class="gray" style="margin-top:10px;width:100%" onclick="historyReportPreview('${h.id}')">📤 정산 리포트 공유</button>`})()}</div>
+  <div class="card"><h3>🧾 영수증 증빙</h3>${((scope.expenses||[]).filter(e=>e.receiptImage).map(e=>`<div class="settlerow"><span><b>${esc(e.title)}</b><br><small class="muted">${esc(e.date||'')} · ${won(e.amount)}</small></span><button class="gray small" onclick="showHistoryReceipt('${h.id}','${e.id}')">영수증 보기</button></div>`).join('')||'<div class="muted">첨부된 영수증이 없습니다.</div>')}</div>
+  <div class="card"><h3>📝 주요 내용 / 메모</h3><div style="white-space:pre-wrap">${esc(h.notes||'기록 없음')}</div></div>
+  <div class="card"><button class="red" onclick="deleteHistory('${h.id}')">이 히스토리 삭제</button></div>`;
+}
+function showHistoryReceipt(hid,eid){let h=(db.history||[]).find(z=>z.id===hid),x=h&&h.snapshot;if(!x)return;let scope=h.mode==='golf'?(x.golfData||{}):(x.tour||{}),e=(scope.expenses||[]).find(z=>z.id===eid);if(!e||!e.receiptImage)return;$('sheet').innerHTML=`<div class="sheethead"><button class="back" onclick="closeM()">← 닫기</button><h2>🧾 영수증 증빙</h2><span></span></div><div class="card"><img src="${e.receiptImage}" style="width:100%;max-height:70vh;object-fit:contain;border-radius:12px"><div class="muted" style="margin-top:8px">${esc(e.title||'비용')} · ${esc(e.date||'')} · ${won(e.amount)}</div>${e.receiptText?`<details style="margin-top:8px"><summary>OCR 원문 보기</summary><div class="muted" style="white-space:pre-wrap;margin-top:6px">${esc(e.receiptText)}</div></details>`:''}</div>`;openM()}
+function historyPhotoViewer(hid,eid,idx){
+  let h=(db.history||[]).find(z=>z.id===hid);if(!h)return;
+  let x=h.snapshot||{},scope=(h.mode||x.mode)==='golf'?(x.golfData||{}):(x.tour||{});
+  let e=(scope.events||[]).find(z=>z.id===eid);
+  if(!e||!e.photos||!e.photos[idx])return;
+  photoViewer(e.photos[idx]);
+}
+function historyReportPreview(hid){
+  let h=(db.history||[]).find(z=>z.id===hid);if(!h)return;
+  let x=h.snapshot||{};
+  window.reportTitleOverride=h.title||'여행';
+  if(!window.reportShareMsg)window.reportShareMsg=`[${h.title||'여행'}] 정산 리포트를 보내드립니다. 확인 부탁드립니다.`;
+  window.reportScope='both';window.reportIncludePhotos=false;
+  let oldMode=mode;mode=h.mode||x.mode||'tour';
+  let html=renderReportHTML(x,{scope:'both',includePhotos:false});
+  mode=oldMode;
+  $('sheet').innerHTML=`<h2>📤 [완료] ${esc(h.title)} 정산 리포트</h2>
+   <div class="muted" style="margin-bottom:8px">완료된 여행의 정산 내역입니다. 개인별/팀별 중 원하는 범위를 선택해 공유할 수 있습니다.</div>
+   <label>정산 범위</label><select id="reportScopeSel" onchange="onHistoryReportOptsChange('${hid}')">
+     <option value="both">전체 (개인별+팀별)</option>
+     <option value="individual">개인별 정산만</option>
+     <option value="team">팀별 정산만</option>
+   </select>
+   <label class="row" style="gap:8px;margin-top:8px;cursor:pointer"><input type="checkbox" id="reportPhotoChk" style="width:auto" onchange="onHistoryReportOptsChange('${hid}')"><span>📷 사진 / 주요 기록 포함</span></label>
+   <label style="margin-top:10px">전달 메시지</label><textarea id="reportMsg" rows="3">${esc(window.reportShareMsg)}</textarea>
+   <div id="reportPrint" class="card" style="max-height:44vh;overflow:auto;margin-top:10px;background:#fbfcfe">${html}</div>
+   <div id="pdfPreviewBox" style="display:none"></div>
+   <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
+     <button class="gray" onclick="previewGeneratedPdf()">🔍 전체 페이지 미리보기</button>
+     <button class="gray" onclick="downloadReportPdf()">📄 PDF 다운로드</button>
+     <button onclick="shareReportPdf()">📤 카톡/문자로 발송</button>
+   </div>`;
+  openM();
+}
+function onHistoryReportOptsChange(hid){
+  let h=(db.history||[]).find(z=>z.id===hid);if(!h)return;
+  let x=h.snapshot||{};
+  window.reportScope=$('reportScopeSel')?$('reportScopeSel').value:'both';
+  window.reportIncludePhotos=$('reportPhotoChk')?$('reportPhotoChk').checked:false;
+  let oldMode=mode;mode=h.mode||x.mode||'tour';
+  let html=renderReportHTML(x,{scope:window.reportScope,includePhotos:window.reportIncludePhotos});
+  mode=oldMode;
+  let box=$('reportPrint');if(box)box.innerHTML=html;
+}
+function deleteHistory(id){if(!confirm('이 여행 히스토리를 삭제할까요?'))return;db.history=(db.history||[]).filter(h=>h.id!==id);historySelected=null;save();render()}
+
+/* ---------- 부팅 ---------- */
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.deferredPrompt=e;});
+migrate();seed();tid=db.trips[0]?.id||null;mode=db.trips[0]?.mode||'tour';render();maybeLock();
+</script></body></html>
